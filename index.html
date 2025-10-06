@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flash Express</title>
+  <style>
+    body {
+      font-family: "Prompt", sans-serif;
+      background-color: #fffbea;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* ส่วนหัว */
+    header {
+      background-color: #ffeb3b;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    header img { height: 28px; vertical-align: middle; }
+    .title { font-weight: bold; font-size: 20px; }
+
+    /* กระเป๋าเงิน */
+    .wallet {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+      margin: 20px;
+      padding: 20px;
+      text-align: center;
+    }
+    .wallet h3 { color: purple; margin: 0 0 10px 0; }
+    .amount {
+      font-size: 36px;
+      font-weight: bold;
+      color: black;
+    }
+    .subtext { color: #555; font-size: 14px; margin-bottom: 10px; }
+    .wallet button {
+      background-color: #ffeb3b;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* เมนูบริการ */
+    .section { margin: 25px; }
+    .section h3 { margin-bottom: 10px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 15px;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+      text-align: center;
+      padding: 15px;
+      transition: 0.3s;
+    }
+    .card:hover { transform: translateY(-5px); }
+    .card img {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 10px;
+    }
+
+    /* ข่าวสาร */
+    .news {
+     .news {
+  background: #fff;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.news-img {
+  width: 80px;      /* ปรับขนาดตามต้องการ เช่น 50px, 100px */
+  height: auto;     /* ให้สัดส่วนภาพไม่บิดเบี้ยว */
+  border-radius: 10px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.news h4 {
+  margin: 0;
+  color: #222;
+}
+
+.news p {
+  margin: 5px 0 0;
+  color: #555;
+}
+
+    }
+    .news h4 { margin: 0; font-size: 16px; }
+    .news p { font-size: 13px; color: #666; }
+
+    /* เมนูด้านล่าง */
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: white;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0;
+      font-size: 12px;
+    }
+    footer div { text-align: center; }
+  </style>
+</head>
+<body>
+
+  <!-- ส่วนหัว -->
+  <header>
+      <div class="title">Flash Express</div>
+    </div>
+    <div>🔔</div>
+  </header>
+
+  <!-- กระเป๋าเงิน -->
+  <div class="wallet">
+    <h3>กระเป๋าเงิน Flash</h3>
+    <div class="amount" id="balance">0.00</div>
+    <div class="subtext">ยอดเงินคงเหลือ</div>
+    <button onclick="withdraw()">ถอนเงิน</button>
+  </div>
+
+  <!-- เมนูบริการ -->
+  <div class="section">
+    <h3>บริการของเรา</h3>
+    <div class="grid">
+      <div class="card"><img src="c97ba948-d703-4629-b65b-633b947cc1f1.png"><div>ส่งพัสดุ</div></div>
+      <div class="card"><img src="807d420f-bfc5-4adf-a2b0-8c323c81a328.png"><div>ติดตามพัสดุ</div></div>
+      <div class="card"><img src="cb0176e4-5794-4790-b581-4169b7b1f2d8.png"><div>ผูกบัญชี</div></div>
+      <div class="card"><img src="4ac93b7e-0431-4f7e-b3f2-317b2d0085d2.png"><div>ดูประวัติ</div></div>
+      <div class="card"><img src="17c78dd9-aed8-4024-bd45-095121937a91.png"><div>เคลม</div></div>
+      <div class="card"><img src="2d3f6070-97ac-4c0c-8608-917e801eecf2.png"><div>อัปเดตข้อมูล</div></div>
+    </div>
+  </div>
+
+<!-- ข่าวสาร -->
+<div class="section">
+  <h3>ข่าวสารและโปรโมชั่น</h3>
+
+  <div class="news">
+    <img src="8986d714-9e66-4895-a704-73e2c4dd7178.png" alt="โปรโมชั่น" class="news-img">
+    <h4>รับเงินคืน 10%</h4>
+    <p>เมื่อเติมเงินผ่านแอป Flash Express วันนี้!</p>
+  </div>
+
+  <div class="news">
+    <img src="009daed7-4504-4ea4-b8fd-6e7c32172f57.png" alt="ส่งของ" class="news-img">
+    <h4>ส่งด่วน ราคาพิเศษ</h4>
+    <p>ส่งพัสดุภายในประเทศเริ่มต้นเพียง 25 บาท</p>
+  </div>
+</div>
+
+
+  <!-- เมนูด้านล่าง -->
+  <footer>
+    <div>🏠<br>หน้าหลัก</div>
+    <div>📰<br>ข่าวสาร</div>
+    <div>💰<br>ธุรกรรม</div>
+    <div>👤<br>บัญชี</div>
+  </footer>
+
+  <script>
+    // ตัวอย่างระบบกระเป๋าเงิน
+    let balance = parseFloat(localStorage.getItem('wallet_balance')) || 1000;
+    const display = document.getElementById('balance');
+
+    function updateDisplay() {
+      display.textContent = balance.toLocaleString('en-US', { minimumFractionDigits: 2 });
+    }
+
+    function withdraw() {
+      const amount = prompt("กรอกจำนวนเงินที่ต้องการถอน:");
+      if (!amount || isNaN(amount)) return alert("กรุณากรอกตัวเลขที่ถูกต้อง");
+      const num = parseFloat(amount);
+      if (num > balance) return alert("ยอดเงินไม่เพียงพอ");
+      balance -= num;
+      localStorage.setItem('wallet_balance', balance);
+      updateDisplay();
+    }
+
+    updateDisplay();
+  </script>
+</body>
+</html>
