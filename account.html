@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>บัญชีผู้ใช้</title>
+  <style>
+    body {
+      font-family: "Prompt", sans-serif;
+      background-color: #fffbea;
+      text-align: center;
+      padding: 30px;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+      width: 320px;
+      margin: 20px auto;
+      padding: 20px;
+      text-align: left;
+    }
+    .card h3 {
+      text-align: center;
+      color: purple;
+    }
+    .info p {
+      margin: 8px 0;
+    }
+    a {
+      display: block;
+      text-align: center;
+      margin-top: 15px;
+      text-decoration: none;
+      color: purple;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ✅ ส่วนข้อมูลผู้ใช้ -->
+  <div class="card">
+    <h3 id="headerTitle">👤 ข้อมูลบัญชีผู้ใช้</h3>
+    <div class="info" id="infoBox">
+      <p>ชื่อ: -</p>
+      <p>เบอร์โทรศัพท์: -</p>
+      <p>อีเมล: -</p>
+    </div>
+  </div>
+
+  <!-- ✅ ส่วนแสดงบัญชีธนาคาร -->
+  <div class="card" id="bankCard" style="display:none;">
+    <h3>🏦 บัญชีธนาคาร</h3>
+    <div class="info" id="bankInfoBox"></div>
+  </div>
+
+  <a href="update.html">✏️ แก้ไขข้อมูล</a>
+  <a href="index.html">← กลับหน้าหลัก</a>
+
+  <script>
+    // ✅ โหลดข้อมูลผู้ใช้
+    const infoBox = document.getElementById("infoBox");
+    const userData = JSON.parse(localStorage.getItem("user_info"));
+
+    if (userData) {
+      infoBox.innerHTML = `
+        <p>ชื่อ: ${userData.name}</p>
+        <p>เบอร์โทรศัพท์: ${userData.phone}</p>
+        <p>อีเมล: ${userData.email}</p>
+      `;
+    } else {
+      infoBox.innerHTML = `<p>❌ ยังไม่มีข้อมูลผู้ใช้</p>`;
+    }
+
+    // ✅ โหลดข้อมูลบัญชีธนาคาร
+    const bankData = JSON.parse(localStorage.getItem("bank_info"));
+    const bankCard = document.getElementById("bankCard");
+    const bankBox = document.getElementById("bankInfoBox");
+
+    if (bankData) {
+      bankCard.style.display = "block"; // แสดงกล่องธนาคาร
+      bankBox.innerHTML = `
+        <p>ชื่อธนาคาร: ${bankData.bankName}</p>
+        <p>เลขบัญชี: ${bankData.accountNumber}</p>
+        <p>ชื่อเจ้าของบัญชี: ${bankData.accountOwner}</p>
+      `;
+    }
+
+    // ✅ ตรวจว่ามาจากหน้าไหน เพื่อเปลี่ยนหัวข้อ
+    const params = new URLSearchParams(window.location.search);
+    const source = params.get("from");
+    const headerTitle = document.getElementById("headerTitle");
+
+    if (source === "update") {
+      headerTitle.innerHTML = "📄 ข้อมูลจากอัปเดตข้อมูล";
+    } else if (source === "bind") {
+      headerTitle.innerHTML = "🏦 ข้อมูลจากผูกบัญชี";
+    } else if (source === "claim") {
+      headerTitle.innerHTML = "💬 ข้อมูลจากเคลม";
+    } else {
+      headerTitle.innerHTML = "👤 ข้อมูลบัญชีผู้ใช้";
+    }
+  </script>
+
+</body>
+</html>

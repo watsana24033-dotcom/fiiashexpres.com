@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FLASH - ยื่นเคลมพัสดุเสียหาย</title>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: "Prompt", sans-serif;
+      background-color: #fffbea;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #ffeb3b;
+      text-align: center;
+      padding: 12px;
+      font-weight: bold;
+      font-size: 20px;
+      color: #333;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .container {
+      max-width: 450px;
+      background: white;
+      margin: 25px auto;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-family: "Prompt", sans-serif;
+    }
+    button {
+      width: 48%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .submit-btn {
+      background-color: #ffeb3b;
+    }
+    .cancel-btn {
+      background-color: #f1f1f1;
+    }
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+    }
+    a {
+      display: block;
+      text-align: center;
+      margin-top: 15px;
+      color: purple;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header>🏠 FLASH ยื่นเคลมพัสดุเสียหาย</header>
+
+  <div class="container">
+    <h2>แบบฟอร์มยื่นเคลม</h2>
+
+    <input type="text" id="Name" placeholder="ชื่อ-นามสกุล">
+    <input type="text" id="Idcard" placeholder="เลขบัตรประชาชน">
+    <input type="text" id="Birthday" placeholder="วัน/เดือน/ปีเกิด">
+    <input type="text" id="Address" placeholder="ที่อยู่">
+        <input type="text" id="Phone" placeholder="เบอร์โทรศัพท์">
+
+    <select id="bank">
+      <option value="">เลือกธนาคาร</option>
+      <option>กรุงไทย</option>
+      <option>กสิกรไทย</option>
+      <option>ไทยพาณิชย์</option>
+      <option>กรุงเทพ</option>
+      <option>ทหารไทยธนชาต</option>
+    </select>
+
+    <input type="text" id="account" placeholder="เลขบัญชี">
+    <input type="number" id="amount" placeholder="จำนวนเงินเคลม (บาท)">
+
+    <div class="button-group">
+      <button class="submit-btn" onclick="submitClaim()">การยื่นคำร้อง</button>
+      <button class="cancel-btn" onclick="window.location.href='index.html'">ยกเลิก</button>
+    </div>
+  </div>
+
+  <a href="index.html">← กลับหน้าหลัก</a>
+
+  <script>
+    function submitClaim() {
+      // เก็บค่าจากฟอร์ม
+      const claim = {
+        id: Date.now(),
+        name: document.getElementById("name").value.trim(),
+        idcard: document.getElementById("idcard").value.trim(),
+        birthday: document.getElementById("birthday").value.trim(),
+        address: document.getElementById("address").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        bank: document.getElementById("bank").value.trim(),
+        account: document.getElementById("account").value.trim(),
+        amount: document.getElementById("amount").value.trim(),
+        date: new Date().toLocaleString("th-TH"),
+        status: "รอการตรวจสอบ"
+      };
+
+      // ตรวจสอบว่ากรอกครบไหม
+      if (Object.values(claim).some(v => v === "")) {
+        alert("⚠️ กรุณากรอกข้อมูลให้ครบทุกช่อง");
+        return;
+      }
+
+      // โหลดข้อมูลเก่าจาก localStorage
+      const claims = JSON.parse(localStorage.getItem("claim_requests")) || [];
+
+      // เพิ่มข้อมูลใหม่
+      claims.push(claim);
+      localStorage.setItem("claim_requests", JSON.stringify(claims));
+
+      alert("✅ ยื่นคำร้องสำเร็จ! ข้อมูลถูกส่งไปยังระบบแอดมินแล้ว");
+      window.location.href = "index.html"; // กลับหน้าหลักหลังส่งเสร็จ
+    }
+  </script>
+
+</body>
+</html>

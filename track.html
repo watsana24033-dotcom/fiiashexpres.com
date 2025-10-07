@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ตรวจเช็คสถานะพัสดุ | Flash Express</title>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body { font-family:"Prompt",sans-serif; background:#fffbea; text-align:center; padding:30px; margin:0; }
+h2 { color:#000; margin-top:0; }
+.header {
+  background:#ffeb3b;
+  font-weight:bold;
+  font-size:20px;
+  padding:12px;
+  text-align:center;
+  border-bottom:2px solid #f5da00;
+}
+input {
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  width:80%;
+  max-width:300px;
+  font-size:16px;
+}
+button {
+  margin-top:10px;
+  padding:10px 20px;
+  border:none;
+  border-radius:8px;
+  font-weight:bold;
+  cursor:pointer;
+}
+button.yellow { background:#ffeb3b; }
+button.white { background:#fff; border:1px solid #000; }
+.result {
+  margin-top:20px;
+  background:#fff;
+  border-radius:12px;
+  padding:20px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.1);
+  width:90%;
+  max-width:400px;
+  text-align:left;
+  display:none;
+  margin-left:auto;
+  margin-right:auto;
+}
+.status {
+  background:#f44336;
+  color:#fff;
+  padding:3px 8px;
+  border-radius:6px;
+}
+.timeline {
+  border-left:3px solid #ffca28;
+  margin:15px 0;
+  padding-left:15px;
+}
+.timeline div { margin-bottom:10px; position:relative; }
+.timeline div::before {
+  content:'●';
+  color:#ffca28;
+  position:absolute;
+  left:-13px;
+}
+.actions button {
+  width:48%;
+  border-radius:8px;
+  padding:10px;
+  margin-top:10px;
+}
+.actions button:first-child { background:#eee; }
+.actions button:last-child { background:#ffeb3b; }
+</style>
+</head>
+<body>
+
+<!-- ส่วนหัว -->
+<div class="header">ตรวจเช็คสถานะพัสดุ Flash Express</div>
+
+<!-- หน้ากรอกเบอร์ -->
+<div id="step1">
+  <h2>📦 ติดตามพัสดุ</h2>
+  <input type="text" id="phone" maxlength="10" placeholder="กรอกเบอร์โทร (เช่น 0812345678)">
+  <br>
+  <button class="yellow" onclick="checkPhone()">เช็กสถานะ</button>
+  <button class="white" onclick="resetForm()">รีเซ็ต</button>
+  <br><br>
+  <a href="index.html">← กลับหน้าหลัก</a>
+</div>
+
+<!-- หน้าผลการตรวจสอบ -->
+<div id="step2" style="display:none;">
+  <h2>📬 ผลการติดตาม</h2>
+  <div class="result" id="resultBox">
+    <p><b>เลขพัสดุ:</b> <span id="trackNo">TH252953904176B</span></p>
+    <p><b>สถานะพัสดุ:</b> <span class="status">เสียหายในการจัดส่ง</span></p>
+    <div class="timeline" id="timeline"></div>
+
+    <div class="actions">
+      <button onclick="alert('📦 รูปพัสดุจะพร้อมในภายหลัง')">รูปพัสดุ</button>
+      <button onclick="window.location.href='claim.html'">ยื่นเคลม</button>
+    </div>
+  </div>
+
+  <br><button class="white" onclick="backToInput()">กลับไปกรอกใหม่</button>
+</div>
+
+<script>
+// ✅ ตรวจสอบเบอร์โทรและแสดงผล
+function checkPhone() {
+  const phone = document.getElementById("phone").value.trim();
+
+  // ตรวจสอบว่าเบอร์โทรถูกต้องไหม
+  if (phone.length !== 10 || isNaN(phone) || !phone.startsWith("0")) {
+    alert("⚠️ กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก และขึ้นต้นด้วยเลข 0");
+    return;
+  }
+
+  // ซ่อนหน้าแรก แสดงผลลัพธ์
+  document.getElementById("step1").style.display = "none";
+  document.getElementById("step2").style.display = "block";
+  document.getElementById("resultBox").style.display = "block";
+
+  // ✅ เรียกสร้าง timeline หลังจากแสดงผล
+  updateTimeline();
+}
+
+// ✅ รีเซ็ตฟอร์ม
+function resetForm() {
+  document.getElementById("phone").value = "";
+}
+
+// ✅ กลับไปหน้ากรอก
+function backToInput() {
+  document.getElementById("step1").style.display = "block";
+  document.getElementById("step2").style.display = "none";
+  document.getElementById("resultBox").style.display = "none";
+}
+
+// ✅ ฟังก์ชันสร้างวันที่แบบไทย
+function formatThaiDate(date, timeText) {
+  const months = ["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+  const d = date.getDate();
+  const m = months[date.getMonth()];
+  const y = date.getFullYear();
+  return `${d} ${m} ${y} ${timeText}`;
+}
+
+// ✅ ฟังก์ชันอัปเดต timeline อัตโนมัติทุกวัน
+function updateTimeline() {
+  const timeline = document.getElementById("timeline");
+  const now = new Date();
+
+  // ฟังก์ชันสร้างวันย้อนหลัง
+  const daysAgo = (num) => {
+    const d = new Date(now);
+    d.setDate(d.getDate() - num);
+    return d;
+  };
+
+  // ✅ รายการสถานะพัสดุ
+  const logs = [
+    { dayOffset: 0, text: "❌ พัสดุของคุณจัดส่งไม่สำเร็จ", time: "09:01" },
+    { dayOffset: 1, text: "บริษัทขนส่งกำลังนำส่งพัสดุให้คุณ", time: "17:40" },
+    { dayOffset: 1, text: "พัสดุถึงศูนย์คัดแยกสินค้า", time: "10:10" },
+    { dayOffset: 1, text: "พัสดุกำลังส่งออกจากศูนย์คัดแยกสินค้า", time: "08:04" },
+    { dayOffset: 2, text: "บริษัทขนส่งเข้ารับพัสดุจากผู้ขายเรียบร้อยแล้ว", time: "12:07" }
+  ];
+
+  // ✅ แสดงผล timeline
+  timeline.innerHTML = logs.map(log => {
+    const dateText = formatThaiDate(daysAgo(log.dayOffset), log.time);
+    return `<div>${dateText} – ${log.text}</div>`;
+  }).join("");
+}
+</script>
+</body>
+</html>

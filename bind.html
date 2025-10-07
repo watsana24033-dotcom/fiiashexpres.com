@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ผูกบัญชีธนาคาร</title>
+  <style>
+    body {
+      font-family: "Prompt", sans-serif;
+      background-color: #fffbea;
+      text-align: center;
+      margin: 0;
+      padding: 30px;
+    }
+    .header {
+      background: #ffeb3b;
+      font-weight: bold;
+      font-size: 20px;
+      padding: 12px;
+      text-align: center;
+      border-bottom: 2px solid #f5da00;
+    }
+    input {
+      display: block;
+      margin: 10px auto;
+      padding: 10px;
+      width: 80%;
+      max-width: 300px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #ffeb3b;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    a {
+      display: block;
+      margin-top: 15px;
+      color: purple;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">🏦 ผูกบัญชีธนาคาร</div>
+
+  <h3>กรอกข้อมูลบัญชีเพื่อบันทึก</h3>
+
+  <input type="text" id="bankName" placeholder="ชื่อธนาคาร">
+  <input type="text" id="accountNumber" placeholder="เลขบัญชี">
+  <input type="text" id="accountOwner" placeholder="ชื่อเจ้าของบัญชี">
+
+  <button onclick="saveBank()">บันทึกข้อมูล</button>
+  <a href="index.html">← กลับหน้าหลัก</a>
+
+  <script>
+    function saveBank() {
+      const bankName = document.getElementById("bankName").value.trim();
+      const accountNumber = document.getElementById("accountNumber").value.trim();
+      const accountOwner = document.getElementById("accountOwner").value.trim();
+
+      if (!bankName || !accountNumber || !accountOwner) {
+        alert("⚠️ กรุณากรอกข้อมูลให้ครบทุกช่อง");
+        return;
+      }
+
+      // ✅ บันทึกข้อมูลลง localStorage
+      const bankData = { bankName, accountNumber, accountOwner };
+      localStorage.setItem("bank_info", JSON.stringify(bankData));
+
+      alert("✅ บันทึกข้อมูลบัญชีสำเร็จ!");
+      window.location.href = "account.html?from=bind"; // ไปหน้า บัญชี
+    }
+  </script>
+
+</body>
+</html>

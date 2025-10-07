@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>อัปเดตข้อมูลผู้ใช้</title>
+  <style>
+    body {
+      font-family: "Prompt", sans-serif;
+      background-color: #fffbea;
+      text-align: center;
+      margin: 0;
+      padding: 30px;
+    }
+    input {
+      display: block;
+      margin: 10px auto;
+      padding: 10px;
+      width: 80%;
+      max-width: 300px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #ffeb3b;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    a { display: block; margin-top: 15px; color: purple; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <h2>📝 อัปเดตข้อมูลผู้ใช้</h2>
+
+  <input type="text" id="fullname" placeholder="ชื่อ-นามสกุล">
+  <input type="text" id="phone" placeholder="เบอร์โทรศัพท์">
+  <input type="email" id="email" placeholder="อีเมล">
+
+  <button onclick="saveInfo()">บันทึกข้อมูล</button>
+  <a href="index.html">← กลับหน้าหลัก</a>
+
+  <script>
+    function saveInfo() {
+      const name = document.getElementById("fullname").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const email = document.getElementById("email").value.trim();
+
+      if (!name || !phone || !email) {
+        alert("⚠️ กรุณากรอกข้อมูลให้ครบทุกช่อง");
+        return;
+      }
+
+      // บันทึกข้อมูลลง localStorage
+      const userData = { name, phone, email };
+      localStorage.setItem("user_info", JSON.stringify(userData));
+
+      alert("✅ บันทึกข้อมูลสำเร็จ!");
+      window.location.href = "account.html"; // ไปหน้า บัญชี
+    }
+  </script>
+
+</body>
+</html>

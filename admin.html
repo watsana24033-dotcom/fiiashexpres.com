@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ระบบแอดมิน - รายการคำร้องเคลมพัสดุ</title>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: "Prompt", sans-serif;
+    background-color: #fffbea;
+    margin: 0;
+    padding: 20px;
+  }
+  h2 {
+    text-align: center;
+    color: #333;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 900px;
+    margin: 20px auto;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  }
+  th, td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+  th {
+    background: #ffeb3b;
+    color: #333;
+  }
+  tr:hover { background-color: #f9f9f9; }
+
+  .status {
+    font-weight: bold;
+  }
+  .status.pending { color: orange; }
+  .status.approved { color: green; }
+  .status.rejected { color: red; }
+
+  .logout-btn {
+    display: block;
+    margin: 20px auto;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+
+<script>
+  // 🔒 ป้องกันไม่ให้เข้าหน้า admin ถ้ายังไม่ล็อกอิน
+  if (sessionStorage.getItem("isAdminLoggedIn") !== "true") {
+    alert("⚠️ โปรดเข้าสู่ระบบก่อนเข้าหน้าแอดมิน");
+    window.location.href = "admin-login.html";
+  }
+</script>
+
+<h2>👨‍💼 ระบบแอดมิน - รายการคำร้องเคลมพัสดุ</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>ชื่อ-นามสกุล</th>
+      <th>เลขบัตรประชาชน</th>
+      <th>เบอร์โทรศัพท์</th>
+      <th>ธนาคาร</th>
+      <th>เลขบัญชี</th>
+      <th>ยอดเคลม</th>
+      <th>วันที่</th>
+      <th>สถานะ</th>
+    </tr>
+  </thead>
+  <tbody id="claimTable">
+    <tr><td colspan="7">❌ ยังไม่มีคำร้องเคลม</td></tr>
+  </tbody>
+</table>
+
+<button class="logout-btn" onclick="logout()">ออกจากระบบ</button>
+
+<script>
+  // ✅ โหลดข้อมูลคำร้องจาก localStorage
+  const table = document.getElementById("claimTable");
+  const claims = JSON.parse(localStorage.getItem("claim_requests")) || [];
+
+  if (claims.length === 0) {
+    table.innerHTML = `<tr><td colspan="7">❌ ยังไม่มีคำร้องเคลม</td></tr>`;
+  } else {
+    table.innerHTML = "";
+    claims.forEach(c => {
+      table.innerHTML += `
+        <tr>
+          <td>${c.name}</td>
+          <td>${c.phone}</td>
+          <td>${c.bank}</td>
+          <td>${c.account}</td>
+          <td>${c.amount}</td>
+          <td>${c.date}</td>
+          <td class="status pending">${c.status}</td>
+        </tr>
+      `;
+    });
+  }
+
+  // 🔓 ออกจากระบบ
+  function logout() {
+    sessionStorage.removeItem("isAdminLoggedIn");
+    alert("ออกจากระบบเรียบร้อยแล้ว");
+    window.location.href = "admin-login.html";
+  }
+</script>
+
+</body>
+</html>
