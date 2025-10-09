@@ -27,12 +27,30 @@
     .info p {
       margin: 8px 0;
     }
-    a {
+    a, button {
       display: block;
       text-align: center;
-      margin-top: 15px;
+      margin: 15px auto;
       text-decoration: none;
       color: purple;
+      background: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button.save-btn {
+      background: #4CAF50;
+      color: white;
+      border-radius: 8px;
+      padding: 8px 16px;
+      width: 200px;
+    }
+    input {
+      width: 95%;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-top: 3px;
     }
   </style>
 </head>
@@ -40,45 +58,45 @@
 
   <!-- ✅ ส่วนข้อมูลผู้ใช้ -->
   <div class="card">
-    <h3 id="headerTitle">👤 ข้อมูลบัญชีผู้ใช้</h3>
-    <div class="info" id="infoBox">
-      <p>ชื่อ: -</p>
-      <p>เบอร์โทรศัพท์: -</p>
-      <p>อีเมล: -</p>
-    </div>
+    <h3>👤 ข้อมูลบัญชีผู้ใช้</h3>
+    <div class="info" id="infoBox"></div>
   </div>
 
-  <!-- ✅ ส่วนแสดงบัญชีธนาคาร -->
-  <div class="card" id="bankCard" style="display:none;">
+  <!-- ✅ ส่วนบัญชีธนาคาร -->
+  <div class="card" id="bankCard">
     <h3>🏦 บัญชีธนาคาร</h3>
     <div class="info" id="bankInfoBox"></div>
   </div>
 
-  <a href="update.html">✏️ แก้ไขข้อมูล</a>
+  <button id="editBtn" onclick="enableEdit()">✏️ แก้ไขข้อมูล</button>
+  <button id="saveBtn" class="save-btn" style="display:none;" onclick="saveData()">💾 บันทึก</button>
   <a href="index.html">← กลับหน้าหลัก</a>
 
   <script>
-    // ✅ โหลดข้อมูลผู้ใช้
     const infoBox = document.getElementById("infoBox");
-    const userData = JSON.parse(localStorage.getItem("user_info"));
+    const bankBox = document.getElementById("bankInfoBox");
+    const editBtn = document.getElementById("editBtn");
+    const saveBtn = document.getElementById("saveBtn");
 
-    if (userData) {
+    let userData = JSON.parse(localStorage.getItem("user_info")) || {
+      name: "สวย",
+      phone: "0845236598",
+      email: "dsf@gmail.com"
+    };
+
+    let bankData = JSON.parse(localStorage.getItem("bank_info")) || {
+      bankName: "กสิกร",
+      accountNumber: "0215420212",
+      accountOwner: "สวย"
+    };
+
+    // แสดงข้อมูลเริ่มต้น
+    function renderData() {
       infoBox.innerHTML = `
         <p>ชื่อ: ${userData.name}</p>
         <p>เบอร์โทรศัพท์: ${userData.phone}</p>
         <p>อีเมล: ${userData.email}</p>
       `;
-    } else {
-      infoBox.innerHTML = `<p>❌ ยังไม่มีข้อมูลผู้ใช้</p>`;
-    }
-
-    // ✅ โหลดข้อมูลบัญชีธนาคาร
-    const bankData = JSON.parse(localStorage.getItem("bank_info"));
-    const bankCard = document.getElementById("bankCard");
-    const bankBox = document.getElementById("bankInfoBox");
-
-    if (bankData) {
-      bankCard.style.display = "block"; // แสดงกล่องธนาคาร
       bankBox.innerHTML = `
         <p>ชื่อธนาคาร: ${bankData.bankName}</p>
         <p>เลขบัญชี: ${bankData.accountNumber}</p>
@@ -86,19 +104,42 @@
       `;
     }
 
-    // ✅ ตรวจว่ามาจากหน้าไหน เพื่อเปลี่ยนหัวข้อ
-    const params = new URLSearchParams(window.location.search);
-    const source = params.get("from");
-    const headerTitle = document.getElementById("headerTitle");
+    renderData();
 
-    if (source === "update") {
-      headerTitle.innerHTML = "📄 ข้อมูลจากอัปเดตข้อมูล";
-    } else if (source === "bind") {
-      headerTitle.innerHTML = "🏦 ข้อมูลจากผูกบัญชี";
-    } else if (source === "claim") {
-      headerTitle.innerHTML = "💬 ข้อมูลจากเคลม";
-    } else {
-      headerTitle.innerHTML = "👤 ข้อมูลบัญชีผู้ใช้";
+    // ฟังก์ชันเปิดโหมดแก้ไข
+    function enableEdit() {
+      infoBox.innerHTML = `
+        <p>ชื่อ: <input id="name" value="${userData.name}"></p>
+        <p>เบอร์โทรศัพท์: <input id="phone" value="${userData.phone}"></p>
+        <p>อีเมล: <input id="email" value="${userData.email}"></p>
+      `;
+      bankBox.innerHTML = `
+        <p>ชื่อธนาคาร: <input id="bankName" value="${bankData.bankName}"></p>
+        <p>เลขบัญชี: <input id="accountNumber" value="${bankData.accountNumber}"></p>
+        <p>ชื่อเจ้าของบัญชี: <input id="accountOwner" value="${bankData.accountOwner}"></p>
+      `;
+      editBtn.style.display = "none";
+      saveBtn.style.display = "block";
+    }
+
+    // ฟังก์ชันบันทึกข้อมูล
+    function saveData() {
+      userData = {
+        name: document.getElementById("name").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        email: document.getElementById("email").value.trim()
+      };
+      bankData = {
+        bankName: document.getElementById("bankName").value.trim(),
+        accountNumber: document.getElementById("accountNumber").value.trim(),
+        accountOwner: document.getElementById("accountOwner").value.trim()
+      };
+      localStorage.setItem("user_info", JSON.stringify(userData));
+      localStorage.setItem("bank_info", JSON.stringify(bankData));
+      alert("✅ บันทึกข้อมูลเรียบร้อยแล้ว");
+      saveBtn.style.display = "none";
+      editBtn.style.display = "block";
+      renderData();
     }
   </script>
 

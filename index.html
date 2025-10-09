@@ -101,7 +101,6 @@
     <div class="subtext">ยอดเงินคงเหลือ</div>
 
     <div class="wallet-buttons">
-      <button onclick="deposit()" style="background-color:#4caf50; color:white;">เติมเงิน</button>
       <button onclick="withdraw()" style="background-color:#ffeb3b;">ถอนเงิน</button>
     </div>
   </div>
@@ -113,7 +112,6 @@
       <a class="card" href="send.html"><img src="c97ba948-d703-4629-b65b-633b947cc1f1.png"><div>ส่งพัสดุ</div></a>
       <a class="card" href="track.html"><img src="807d420f-bfc5-4adf-a2b0-8c323c81a328.png"><div>ติดตามพัสดุ</div></a>
       <a class="card" href="bind.html"><img src="cb0176e4-5794-4790-b581-4169b7b1f2d8.png"><div>ผูกบัญชี</div></a>
-      <a class="card" href="history.html"><img src="4ac93b7e-0431-4f7e-b3f2-317b2d0085d2.png"><div>ดูประวัติ</div></a>
       <a class="card" href="claim.html"><img src="17c78dd9-aed8-4024-bd45-095121937a91.png"><div>เคลม</div></a>
       <a class="card" href="update.html"><img src="2d3f6070-97ac-4c0c-8608-917e801eecf2.png"><div>อัปเดตข้อมูล</div></a>
     </div>
@@ -143,35 +141,29 @@
     <a href="account.html">👤<br>บัญชี</a>
   </footer>
 
-  <!-- ✅ ระบบเติมเงินรออนุมัติ + ถอนเงิน -->
-  <script>
-  // โหลดยอด
-  let balance = parseFloat(localStorage.getItem('wallet_balance')) || 0;
-  const display = document.getElementById('balance');
+
+
+<script>
+let balance = parseFloat(localStorage.getItem('wallet_balance')) || 0;
+const display = document.getElementById('balance');
+updateDisplay();
+
+function updateDisplay() {
+  display.textContent = balance.toLocaleString('th-TH', { minimumFractionDigits: 2 });
+}
+
+// 🟡 ฟังก์ชันถอนเงิน
+function withdraw() {
+  const amount = prompt("กรอกจำนวนเงินที่ต้องการถอน:");
+  if (!amount || isNaN(amount)) return alert("⚠️ กรุณากรอกจำนวนให้ถูกต้อง");
+  const num = parseFloat(amount);
+  if (num <= 0 || num > balance) return alert("❌ จำนวนเงินไม่ถูกต้องหรือเกินยอดคงเหลือ");
+
+  balance -= num;
+  localStorage.setItem("wallet_balance", balance);
+  alert(`✅ ถอนเงิน ${num.toLocaleString("th-TH")} บาทเรียบร้อยแล้ว`);
   updateDisplay();
-
-  function updateDisplay() {
-    display.textContent = balance.toLocaleString('th-TH', { minimumFractionDigits: 2 });
-  }
-
-  // ✅ เติมเงิน (รออนุมัติ)
-  function deposit() {
-    const amount = prompt("กรอกจำนวนเงินที่ต้องการเติม:");
-    if (!amount || isNaN(amount)) return alert("⚠️ กรุณากรอกจำนวนเงินให้ถูกต้อง");
-    const num = parseFloat(amount);
-    if (num <= 0) return alert("⚠️ จำนวนเงินต้องมากกว่า 0 บาท");
-
-    const pending = JSON.parse(localStorage.getItem('pending_deposits')) || [];
-    const request = {
-      id: Date.now(),
-      amount: num,
-      date: new Date().toLocaleString('th-TH'),
-      status: "รออนุมัติ"
-    };
-    pending.push(request);
-    localStorage.setItem('pending_deposits', JSON.stringify(pending));
-    alert(`✅ คำขอเติมเงิน ${num.toLocaleString()} บาท ถูกส่งเรียบร้อย\n⏳ รอการอนุมัติจากแอดมิน`);
-  }
+}
 
     // ✅ ถอนเงิน (จำลองระบบขัดข้องหลัง 2 วินาที)
   function withdraw() {
@@ -231,21 +223,6 @@
       // กลับหน้าหลัก
       window.location.href = "index.html";
     }, 2000);
-  }
-
-
-  // ✅ เช็กยอดที่แอดมินอนุมัติ
-  function checkApprovedDeposits() {
-    const approved = JSON.parse(localStorage.getItem('approved_deposits')) || [];
-    if (approved.length > 0) {
-      approved.forEach(item => {
-        balance += item.amount;
-        addHistory(`เติมเงิน ${item.amount.toLocaleString()} บาท (แอดมินอนุมัติแล้ว)`);
-      });
-      localStorage.setItem('wallet_balance', balance);
-      updateDisplay();
-      localStorage.removeItem('approved_deposits');
-    }
   }
 
   // ✅ บันทึกประวัติ
