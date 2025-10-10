@@ -2,166 +2,301 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ระบบแอดมิน | จัดการเงินลูกค้า</title>
+  <title>ระบบแอดมิน | Flash Express</title>
+  <link rel="icon" href="https://flashexpress.com/favicon.ico" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet">
+
   <style>
     body {
       font-family: "Prompt", sans-serif;
       background-color: #fffbea;
       margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      padding: 0;
     }
+
+    header {
+      background: #ffeb3b;
+      text-align: center;
+      padding: 15px;
+      font-weight: bold;
+      font-size: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
     .container {
+      padding: 20px;
+      max-width: 1000px;
+      margin: 20px auto;
       background: white;
-      padding: 30px;
       border-radius: 12px;
       box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-      text-align: center;
-      width: 320px;
     }
+
     h3 {
-      margin-bottom: 15px;
+      text-align: center;
       color: #5e35b1;
     }
-    input {
-      width: 80%;
-      padding: 8px;
+
+    input[type="text"] {
+      display: block;
+      width: 90%;
+      max-width: 400px;
+      margin: 10px auto 25px;
+      padding: 10px;
       border-radius: 8px;
       border: 1px solid #ccc;
       text-align: center;
+      font-size: 14px;
     }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 25px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    th {
+      background: #ffeb3b;
+    }
+
     button {
-      margin-top: 10px;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btn-green { background: #4CAF50; color: white; }
+    .btn-red   { background: #f44336; color: white; }
+    .btn-yellow{ background: #ffeb3b; }
+    .btn-blue  { background: #2196F3; color: white; }
+
+    .logout {
+      display: block;
+      margin: 20px auto;
+      background: #ff5252;
+      color: white;
       border: none;
       border-radius: 8px;
       padding: 10px 20px;
       font-weight: bold;
       cursor: pointer;
-      width: 80%;
     }
-    .btn-topup {
-      background-color: #4CAF50;
-      color: white;
-    }
-    .btn-topup:hover {
-      background-color: #45a049;
-    }
-    .btn-withdraw {
-      background-color: #ffeb3b;
-    }
-    .btn-withdraw:hover {
-      background-color: #fdd835;
-    }
-    .btn-logout {
-      background-color: #ff5252;
-      color: white;
-      margin-top: 15px;
-    }
-    .btn-logout:hover {
-      background-color: #ff1744;
-    }
-    hr {
-      width: 80%;
-      border: 1px solid #ddd;
-      margin: 20px auto;
+
+    .logout:hover { background: #e53935; }
+
+    @media (max-width: 600px) {
+      th, td { font-size: 12px; }
+      input[type="text"] { width: 95%; }
     }
   </style>
 </head>
 <body>
 
+  <header>👨‍💼 ระบบแอดมิน - จัดการข้อมูลลูกค้าทั้งหมด</header>
+
   <div class="container">
-    <h3>💼 ระบบจัดการเงินลูกค้า</h3>
-    <hr>
+    <h3>📱 รายชื่อลูกค้าทั้งหมด</h3>
 
-    <!-- 💰 เติมเงิน -->
-    <h3>💰 เติมเงินให้ลูกค้า</h3>
-    <input type="number" id="topupAmount" placeholder="จำนวนเงิน">
-    <button class="btn-topup" onclick="adminTopup()">เติมเงิน</button>
+    <!-- 🔍 ช่องค้นหาเบอร์โทร -->
+    <input type="text" id="searchInput" placeholder="🔍 พิมพ์เบอร์โทรลูกค้าเพื่อค้นหา...">
 
-    <hr>
+    <!-- 📋 ตารางลูกค้า -->
+    <table id="customerTable">
+      <thead>
+        <tr>
+          <th>เบอร์โทร</th>
+          <th>ยอดเงินคงเหลือ</th>
+          <th>ธุรกรรมล่าสุด</th>
+          <th colspan="3">จัดการ</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
 
-    <!-- 💸 ถอนเงิน -->
-    <h3>💸 ถอนเงินให้ลูกค้า</h3>
-    <input type="number" id="withdrawAmount" placeholder="จำนวนเงิน">
-    <button class="btn-withdraw" onclick="adminWithdraw()">ถอนเงิน</button>
+    <h3>📦 รายการยื่นเคลมพัสดุ</h3>
+    <table id="claimTable">
+      <thead>
+        <tr>
+          <th>ชื่อ</th>
+          <th>วันที่</th>
+          <th>เบอร์โทร</th>
+          <th>ธนาคาร</th>
+          <th>บัญชี</th>
+          <th>ยอดเคลม</th>
+          <th>สถานะ</th>
+          <th>จัดการ</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
 
-    <hr>
-
-    <button class="btn-logout" onclick="logout()">🚪 ออกจากระบบ</button>
+    <button class="logout" onclick="logout()">🚪 ออกจากระบบ</button>
   </div>
 
   <script>
-    // ✅ ตรวจสอบการล็อกอิน
+    // 🔒 ตรวจสอบสิทธิ์การเข้าใช้งาน
     if (sessionStorage.getItem("isAdminLoggedIn") !== "true") {
-      alert("กรุณาเข้าสู่ระบบก่อนเข้าหน้านี้");
+      alert("⚠️ กรุณาเข้าสู่ระบบก่อนเข้าหน้าแอดมิน");
       window.location.href = "admin-login.html";
     }
 
-    // 💰 เติมเงินให้ลูกค้า
-    function adminTopup() {
-      const amount = parseFloat(document.getElementById("topupAmount").value.trim());
-      if (isNaN(amount) || amount <= 0) {
-        alert("⚠️ กรุณากรอกจำนวนเงินให้ถูกต้อง");
+    // ✅ โหลดข้อมูลลูกค้าทั้งหมด
+    const balances = JSON.parse(localStorage.getItem("customer_balances")) || {};
+    const customerTable = document.querySelector("#customerTable tbody");
+
+    function renderCustomers(filter = "") {
+      customerTable.innerHTML = "";
+
+      const customers = Object.keys(balances).filter(phone =>
+        phone.includes(filter)
+      );
+
+      if (customers.length === 0) {
+        customerTable.innerHTML = `<tr><td colspan="6">❌ ไม่พบข้อมูลลูกค้า</td></tr>`;
         return;
       }
 
-      let balance = parseFloat(localStorage.getItem("wallet_balance")) || 0;
-      balance += amount;
-      localStorage.setItem("wallet_balance", balance.toFixed(2));
+      customers.forEach(phone => {
+        const key = `transactions_${phone}`;
+        const tx = JSON.parse(localStorage.getItem(key)) || [];
+        const latest = tx[0] ? `${tx[0].type} ${tx[0].amount}฿ (${tx[0].status})` : "-";
 
-      const transactions = JSON.parse(localStorage.getItem("transactions")) || [];
-      transactions.push({
-        type: "เติมเงิน (โดยแอดมิน)",
-        amount: amount,
-        date: new Date().toLocaleString("th-TH"),
-        status: "สำเร็จ"
+        customerTable.innerHTML += `
+          <tr>
+            <td>${phone}</td>
+            <td>${balances[phone].toLocaleString("th-TH", { minimumFractionDigits: 2 })}</td>
+            <td>${latest}</td>
+            <td><button class="btn-green" onclick="topUp('${phone}')">+ เติมเงิน</button></td>
+            <td><button class="btn-red" onclick="withdraw('${phone}')">- ถอนเงิน</button></td>
+            <td><button class="btn-blue" onclick="viewTransactions('${phone}')">ดูธุรกรรม</button></td>
+          </tr>
+        `;
       });
-      localStorage.setItem("transactions", JSON.stringify(transactions));
-
-      alert(`✅ เติมเงินให้ลูกค้า ${amount.toFixed(2)} บาท สำเร็จ`);
-      document.getElementById("topupAmount").value = "";
     }
 
-    // 💸 ถอนเงินให้ลูกค้า
-    function adminWithdraw() {
-      const amount = parseFloat(document.getElementById("withdrawAmount").value.trim());
-      if (isNaN(amount) || amount <= 0) {
-        alert("⚠️ กรุณากรอกจำนวนเงินที่ต้องการถอน");
+    renderCustomers();
+
+    // 🔍 ค้นหาทันทีเมื่อพิมพ์
+    document.getElementById("searchInput").addEventListener("input", (e) => {
+      const searchValue = e.target.value.trim();
+      renderCustomers(searchValue);
+    });
+
+    // 💰 เติมเงิน
+    function topUp(phone) {
+      const amount = parseFloat(prompt(`💸 ใส่จำนวนเงินที่ต้องการเติมให้เบอร์ ${phone}:`));
+      if (isNaN(amount) || amount <= 0) return alert("⚠️ กรุณากรอกจำนวนเงินที่ถูกต้อง");
+
+      let balances = JSON.parse(localStorage.getItem("customer_balances")) || {};
+      if (!balances[phone]) balances[phone] = 0;
+      balances[phone] += amount;
+      localStorage.setItem("customer_balances", JSON.stringify(balances));
+
+      addTransaction(phone, "เติมเงิน", amount, "✅ สำเร็จ");
+      alert(`✅ เติมเงินให้เบอร์ ${phone} จำนวน ${amount.toFixed(2)} บาทแล้ว`);
+      renderCustomers();
+    }
+
+    // 💸 ถอนเงิน
+    function withdraw(phone) {
+      const amount = parseFloat(prompt(`💰 ใส่จำนวนเงินที่ต้องการถอนจากเบอร์ ${phone}:`));
+      if (isNaN(amount) || amount <= 0) return alert("⚠️ กรุณากรอกจำนวนเงินที่ถูกต้อง");
+
+      let balances = JSON.parse(localStorage.getItem("customer_balances")) || {};
+      if (!balances[phone] || balances[phone] < amount) {
+        alert("❌ ยอดเงินไม่เพียงพอสำหรับการถอน");
         return;
       }
 
-      let balance = parseFloat(localStorage.getItem("wallet_balance")) || 0;
-      const transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+      balances[phone] -= amount;
+      localStorage.setItem("customer_balances", JSON.stringify(balances));
 
-      if (amount > balance) {
-        alert("❌ ยอดเงินคงเหลือไม่พอสำหรับการถอน");
-        transactions.push({
-          type: "ถอนเงิน (โดยแอดมิน)",
-          amount: amount,
-          date: new Date().toLocaleString("th-TH"),
-          status: "ไม่สำเร็จ (ยอดเงินไม่พอ)"
-        });
-        localStorage.setItem("transactions", JSON.stringify(transactions));
-        return;
-      }
+      addTransaction(phone, "ถอนเงิน", amount, "✅ สำเร็จ");
+      alert(`💸 ถอนเงินจากเบอร์ ${phone} จำนวน ${amount.toFixed(2)} บาทแล้ว`);
+      renderCustomers();
+    }
 
-      balance -= amount;
-      localStorage.setItem("wallet_balance", balance.toFixed(2));
-
-      transactions.push({
-        type: "ถอนเงิน (โดยแอดมิน)",
-        amount: amount,
+    // 📜 เพิ่มธุรกรรม
+    function addTransaction(phone, type, amount, status) {
+      const key = `transactions_${phone}`;
+      const list = JSON.parse(localStorage.getItem(key)) || [];
+      const entry = {
         date: new Date().toLocaleString("th-TH"),
-        status: "สำเร็จ"
-      });
-      localStorage.setItem("transactions", JSON.stringify(transactions));
+        type,
+        amount,
+        status
+      };
+      list.unshift(entry);
+      localStorage.setItem(key, JSON.stringify(list));
+    }
 
-      alert(`✅ ถอนเงิน ${amount.toFixed(2)} บาท สำเร็จ`);
-      document.getElementById("withdrawAmount").value = "";
+    // 👁 ดูธุรกรรมของลูกค้า
+    function viewTransactions(phone) {
+      const key = `transactions_${phone}`;
+      const tx = JSON.parse(localStorage.getItem(key)) || [];
+      if (tx.length === 0) {
+        alert(`📞 เบอร์ ${phone}\nยังไม่มีธุรกรรมในระบบ`);
+      } else {
+        let msg = `📜 ธุรกรรมของเบอร์ ${phone}:\n\n`;
+        tx.forEach(t => {
+          msg += `• ${t.date}\n${t.type} ${t.amount}฿ - ${t.status}\n\n`;
+        });
+        alert(msg);
+      }
+    }
+
+    // ✅ โหลดรายการเคลมพัสดุ
+    const claims = JSON.parse(localStorage.getItem("claim_requests")) || [];
+    const claimTable = document.querySelector("#claimTable tbody");
+
+    if (claims.length === 0) {
+      claimTable.innerHTML = `<tr><td colspan="8">ไม่มีรายการเคลม</td></tr>`;
+    } else {
+      claims.forEach((c, i) => {
+        claimTable.innerHTML += `
+          <tr>
+            <td>${c.name}</td>
+            <td>${c.date}</td>
+            <td>${c.phone}</td>
+            <td>${c.bank}</td>
+            <td>${c.account}</td>
+            <td>${c.amount}</td>
+            <td id="status-${i}" style="color:${c.status === "อนุมัติ" ? "green" : c.status === "ปฏิเสธ" ? "red" : "black"};">${c.status}</td>
+            <td>
+              <button class="btn-green" onclick="approveClaim(${i})">อนุมัติ</button>
+              <button class="btn-red" onclick="rejectClaim(${i})">ปฏิเสธ</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    // 🟢 อนุมัติ / ปฏิเสธ เคลม
+    function approveClaim(i) {
+      let claims = JSON.parse(localStorage.getItem("claim_requests")) || [];
+      claims[i].status = "อนุมัติ";
+      localStorage.setItem("claim_requests", JSON.stringify(claims));
+      document.getElementById(`status-${i}`).textContent = "อนุมัติ";
+      document.getElementById(`status-${i}`).style.color = "green";
+      alert("✅ อนุมัติคำร้องเรียบร้อยแล้ว");
+    }
+
+    function rejectClaim(i) {
+      let claims = JSON.parse(localStorage.getItem("claim_requests")) || [];
+      claims[i].status = "ปฏิเสธ";
+      localStorage.setItem("claim_requests", JSON.stringify(claims));
+      document.getElementById(`status-${i}`).textContent = "ปฏิเสธ";
+      document.getElementById(`status-${i}`).style.color = "red";
+      alert("❌ ปฏิเสธคำร้องแล้ว");
     }
 
     // 🚪 ออกจากระบบ

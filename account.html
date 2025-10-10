@@ -2,8 +2,8 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>บัญชีผู้ใช้</title>
+<link rel="icon" href="https://flashexpress.com/favicon.ico" type="image/x-icon">
+<title>Flash Express</title>
   <style>
     body {
       font-family: "Prompt", sans-serif;
@@ -24,9 +24,7 @@
       text-align: center;
       color: purple;
     }
-    .info p {
-      margin: 8px 0;
-    }
+    .info p { margin: 8px 0; }
     a, button {
       display: block;
       text-align: center;
@@ -56,13 +54,11 @@
 </head>
 <body>
 
-  <!-- ✅ ส่วนข้อมูลผู้ใช้ -->
   <div class="card">
     <h3>👤 ข้อมูลบัญชีผู้ใช้</h3>
     <div class="info" id="infoBox"></div>
   </div>
 
-  <!-- ✅ ส่วนบัญชีธนาคาร -->
   <div class="card" id="bankCard">
     <h3>🏦 บัญชีธนาคาร</h3>
     <div class="info" id="bankInfoBox"></div>
@@ -73,44 +69,54 @@
   <a href="index.html">← กลับหน้าหลัก</a>
 
   <script>
+    const activeCustomer = localStorage.getItem("active_customer");
+    if (!activeCustomer) {
+      alert("⚠️ กรุณาเข้าสู่ระบบก่อน");
+      window.location.href = "login-customer.html";
+    }
+
     const infoBox = document.getElementById("infoBox");
     const bankBox = document.getElementById("bankInfoBox");
     const editBtn = document.getElementById("editBtn");
     const saveBtn = document.getElementById("saveBtn");
 
-    let userData = JSON.parse(localStorage.getItem("user_info")) || {
-      name: "สวย",
-      phone: "0845236598",
-      email: "dsf@gmail.com"
+    // ✅ โหลดข้อมูลเฉพาะของเบอร์ที่กำลังล็อกอิน
+    let userKey = `user_info_${activeCustomer}`;
+    let bankKey = `bank_info_${activeCustomer}`;
+
+    let userData = JSON.parse(localStorage.getItem(userKey)) || {
+      name: "",
+      phone: activeCustomer,
+      email: ""
     };
 
-    let bankData = JSON.parse(localStorage.getItem("bank_info")) || {
-      bankName: "กสิกร",
-      accountNumber: "0215420212",
-      accountOwner: "สวย"
+    let bankData = JSON.parse(localStorage.getItem(bankKey)) || {
+      bankName: "",
+      accountNumber: "",
+      accountOwner: ""
     };
 
-    // แสดงข้อมูลเริ่มต้น
+    // ✅ แสดงข้อมูล
     function renderData() {
       infoBox.innerHTML = `
-        <p>ชื่อ: ${userData.name}</p>
-        <p>เบอร์โทรศัพท์: ${userData.phone}</p>
-        <p>อีเมล: ${userData.email}</p>
+        <p>ชื่อ: ${userData.name || "-"}</p>
+        <p>เบอร์โทรศัพท์: ${userData.phone || activeCustomer}</p>
+        <p>อีเมล: ${userData.email || "-"}</p>
       `;
       bankBox.innerHTML = `
-        <p>ชื่อธนาคาร: ${bankData.bankName}</p>
-        <p>เลขบัญชี: ${bankData.accountNumber}</p>
-        <p>ชื่อเจ้าของบัญชี: ${bankData.accountOwner}</p>
+        <p>ชื่อธนาคาร: ${bankData.bankName || "-"}</p>
+        <p>เลขบัญชี: ${bankData.accountNumber || "-"}</p>
+        <p>ชื่อเจ้าของบัญชี: ${bankData.accountOwner || "-"}</p>
       `;
     }
 
     renderData();
 
-    // ฟังก์ชันเปิดโหมดแก้ไข
+    // ✅ เปิดโหมดแก้ไข
     function enableEdit() {
       infoBox.innerHTML = `
         <p>ชื่อ: <input id="name" value="${userData.name}"></p>
-        <p>เบอร์โทรศัพท์: <input id="phone" value="${userData.phone}"></p>
+        <p>เบอร์โทรศัพท์: <input id="phone" value="${userData.phone}" disabled></p>
         <p>อีเมล: <input id="email" value="${userData.email}"></p>
       `;
       bankBox.innerHTML = `
@@ -122,11 +128,11 @@
       saveBtn.style.display = "block";
     }
 
-    // ฟังก์ชันบันทึกข้อมูล
+    // ✅ ฟังก์ชันบันทึกข้อมูล
     function saveData() {
       userData = {
         name: document.getElementById("name").value.trim(),
-        phone: document.getElementById("phone").value.trim(),
+        phone: activeCustomer,
         email: document.getElementById("email").value.trim()
       };
       bankData = {
@@ -134,8 +140,11 @@
         accountNumber: document.getElementById("accountNumber").value.trim(),
         accountOwner: document.getElementById("accountOwner").value.trim()
       };
-      localStorage.setItem("user_info", JSON.stringify(userData));
-      localStorage.setItem("bank_info", JSON.stringify(bankData));
+
+      // 🔹 บันทึกแยกตามเบอร์
+      localStorage.setItem(userKey, JSON.stringify(userData));
+      localStorage.setItem(bankKey, JSON.stringify(bankData));
+
       alert("✅ บันทึกข้อมูลเรียบร้อยแล้ว");
       saveBtn.style.display = "none";
       editBtn.style.display = "block";
