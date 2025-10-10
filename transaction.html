@@ -2,108 +2,98 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ประวัติธุรกรรม</title>
+<link rel="icon" href="https://flashexpress.com/favicon.ico" type="image/x-icon">
+<title>Flash Express</title>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: "Prompt", sans-serif;
       background-color: #fffbea;
-      text-align: center;
-      padding: 30px;
+      margin: 0;
+      padding: 0;
     }
-    h2 {
-      color: purple;
+    header {
+      background-color: #ffeb3b;
+      padding: 12px 20px;
+      text-align: center;
+      font-weight: bold;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
     table {
       width: 90%;
-      max-width: 600px;
       margin: 20px auto;
       border-collapse: collapse;
       background: white;
-      border-radius: 12px;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+      border-radius: 10px;
       overflow: hidden;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
     }
     th, td {
-      padding: 12px;
-      border-bottom: 1px solid #eee;
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+      font-size: 14px;
     }
     th {
-      background-color: #f3e5f5;
-      color: #4a148c;
+      background: #ffeb3b;
     }
-    .status-success {
-      color: green;
-      font-weight: bold;
-    }
-    .status-fail {
-      color: red;
-      font-weight: bold;
-    }
-    a {
+    .back {
       display: block;
-      margin-top: 20px;
-      text-decoration: none;
-      color: purple;
+      width: 90%;
+      margin: 20px auto;
+      text-align: center;
+      background: #ffeb3b;
+      border: none;
+      border-radius: 8px;
+      padding: 10px;
+      font-weight: bold;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
-
-  <h2>💰 ประวัติธุรกรรม</h2>
+  <header>💰 ประวัติธุรกรรม</header>
 
   <table>
     <thead>
       <tr>
         <th>วันที่</th>
         <th>ประเภท</th>
-        <th>จำนวน</th>
+        <th>จำนวนเงิน</th>
         <th>สถานะ</th>
       </tr>
     </thead>
-    <tbody id="transactionTable"></tbody>
+    <tbody id="historyTable"></tbody>
   </table>
 
-  <p id="emptyMsg">ยังไม่มีธุรกรรมในระบบ</p>
+  <button class="back" onclick="window.location.href='index.html'">⬅️ กลับหน้าหลัก</button>
 
-  <a href="index.html">← กลับหน้าหลัก</a>
+  <script>
+    const activeCustomer = localStorage.getItem("active_customer");
+    if (!activeCustomer) {
+      alert("⚠️ กรุณาเข้าสู่ระบบก่อน");
+      window.location.href = "login-customer.html";
+    }
 
- <script>
-  const table = document.getElementById("transactionTable");
-  const msg = document.getElementById("emptyMsg");
+    const key = `transactions_${activeCustomer}`;
+    const transactions = JSON.parse(localStorage.getItem(key)) || [];
+    const table = document.getElementById("historyTable");
 
-  // ✅ โหลดข้อมูลธุรกรรมจาก localStorage
-  const transactions = JSON.parse(localStorage.getItem("transactions")) || [];
-
-  console.log("📦 ข้อมูลธุรกรรมทั้งหมด:", transactions); // ดูข้อมูลใน Console
-
-  if (transactions.length === 0) {
-    msg.style.display = "block";
-  } else {
-    msg.style.display = "none";
-
-    // 🔁 แสดงจากรายการล่าสุดขึ้นก่อน
-    transactions.slice().reverse().forEach((t, i) => {
-      const row = document.createElement("tr");
-
-      // ตรวจสอบว่ามีข้อมูลครบไหม
-      const type = t.type || "-";
-      const amount = t.amount ? parseFloat(t.amount).toFixed(2) : "0.00";
-      const date = t.date || "-";
-      const status = t.status || "ไม่ทราบสถานะ";
-
-      // เลือกสีตามสถานะ
-      const statusClass = status.includes("ไม่สำเร็จ") ? "status-fail" : "status-success";
-
-      row.innerHTML = `
-        <td>${date}</td>
-        <td>${type}</td>
-        <td>${amount}</td>
-        <td class="${statusClass}">${status}</td>
-      `;
-      table.appendChild(row);
-    });
-  }
-</script>
-
+    if (transactions.length === 0) {
+      table.innerHTML = `<tr><td colspan="4">ยังไม่มีประวัติธุรกรรม</td></tr>`;
+    } else {
+      transactions.forEach(t => {
+        const row = `
+          <tr>
+            <td>${t.date}</td>
+            <td>${t.type}</td>
+            <td>${t.amount.toLocaleString("th-TH", {minimumFractionDigits:2})}</td>
+            <td>${t.status}</td>
+          </tr>
+        `;
+        table.innerHTML += row;
+      });
+    }
+  </script>
+</body>
+</html>

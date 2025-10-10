@@ -2,8 +2,9 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flash Express</title>
+  <link rel="icon" href="https://flashexpress.com/favicon.ico" type="image/x-icon">
+<title>Flash Express</title>
+
   <style>
     body {
       font-family: "Prompt", sans-serif;
@@ -12,7 +13,6 @@
       padding: 0;
     }
 
-    /* ส่วนหัว */
     header {
       background-color: #ffeb3b;
       display: flex;
@@ -24,10 +24,8 @@
       top: 0;
       z-index: 100;
     }
-    header img { height: 28px; vertical-align: middle; }
     .title { font-weight: bold; font-size: 20px; }
 
-    /* กระเป๋าเงิน */
     .wallet {
       background: white;
       border-radius: 12px;
@@ -40,13 +38,11 @@
     .amount { font-size: 36px; font-weight: bold; color: black; }
     .subtext { color: #555; font-size: 14px; margin-bottom: 10px; }
 
-    /* ปุ่ม */
     .wallet-buttons { display:flex; justify-content:center; gap:10px; margin-top:10px; }
     .wallet button {
       border:none; border-radius:8px; padding:10px 20px; font-weight:bold; cursor:pointer;
     }
 
-    /* เมนูบริการ */
     .section { margin: 25px; }
     .section h3 { margin-bottom: 10px; }
     .grid {
@@ -65,7 +61,6 @@
     .card:hover { transform: translateY(-5px); }
     .card img { width: 40px; height: 40px; margin-bottom: 10px; }
 
-    /* ข่าวสาร */
     .news {
       background: #fff;
       border-radius: 12px;
@@ -73,9 +68,7 @@
       margin-bottom: 15px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
-    .news-img { width: 80px; height: auto; border-radius: 10px; margin-bottom: 10px; }
 
-    /* Footer */
     footer {
       position: fixed; bottom: 0; left: 0; width: 100%;
       background: white; border-top: 1px solid #ddd;
@@ -88,28 +81,24 @@
 </head>
 <body>
 
-  <!-- ส่วนหัว -->
   <header>
     <div class="title">Flash Express</div>
     <div>🔔</div>
   </header>
 
-  <!-- ส่วนกระเป๋าเงิน -->
   <div class="wallet">
     <h3>กระเป๋าเงิน Flash</h3>
     <div class="amount" id="balance">0.00</div>
-    <div class="subtext">ยอดเงินคงเหลือ</div>
-
+    <div class="subtext" id="customerInfo">เบอร์: -</div>
     <div class="wallet-buttons">
       <button onclick="withdraw()" style="background-color:#ffeb3b;">ถอนเงิน</button>
     </div>
   </div>
 
-  <!-- เมนูบริการ -->
   <div class="section">
     <h3>บริการของเรา</h3>
     <div class="grid">
-      <a class="card" href="send.html"><img src="c97ba948-d703-4629-b65b-633b947cc1f1.png"><div>ส่งพัสดุ</div></a>
+      <a class="card" href="send.html"><img src="009daed7-4504-4ea4-b8fd-6e7c32172f57.png"><div>ส่งพัสดุ</div></a>
       <a class="card" href="track.html"><img src="807d420f-bfc5-4adf-a2b0-8c323c81a328.png"><div>ติดตามพัสดุ</div></a>
       <a class="card" href="bind.html"><img src="cb0176e4-5794-4790-b581-4169b7b1f2d8.png"><div>ผูกบัญชี</div></a>
       <a class="card" href="claim.html"><img src="17c78dd9-aed8-4024-bd45-095121937a91.png"><div>เคลม</div></a>
@@ -117,23 +106,30 @@
     </div>
   </div>
 
-  <!-- ข่าวสาร -->
-  <div class="section">
-    <h3>ข่าวสารและโปรโมชั่น</h3>
-    <div class="news">
-      <img src="8986d714-9e66-4895-a704-73e2c4dd7178.png" alt="โปรโมชั่น" class="news-img">
+ <!-- 🔸 ข่าวสารและโปรโมชั่น -->
+<div class="section">
+  <h3>ข่าวสารและโปรโมชั่น</h3>
+
+  <!-- กล่องข่าวที่ 1 -->
+  <div class="news">
+    <img src="8986d714-9e66-4895-a704-73e2c4dd7178.png" alt="รับเงินคืน" style="width:40px; height:40px; float:left; margin-right:10px;">
+    <div>
       <h4>รับเงินคืน 10%</h4>
       <p>เมื่อเติมเงินผ่านแอป Flash Express วันนี้!</p>
     </div>
+  </div>
 
-    <div class="news">
-      <img src="009daed7-4504-4ea4-b8fd-6e7c32172f57.png" alt="ส่งของ" class="news-img">
+  <!-- กล่องข่าวที่ 2 -->
+  <div class="news">
+    <img src="c97ba948-d703-4629-b65b-633b947cc1f1.png" alt="ส่งด่วน" style="width:40px; height:40px; float:left; margin-right:10px;">
+    <div>
       <h4>ส่งด่วน ราคาพิเศษ</h4>
       <p>ส่งพัสดุภายในประเทศเริ่มต้นเพียง 25 บาท</p>
     </div>
   </div>
+</div>
 
-  <!-- Footer -->
+
   <footer>
     <a href="index.html">🏠<br>หน้าหลัก</a>
     <a href="news.html">📰<br>ข่าวสาร</a>
@@ -141,99 +137,158 @@
     <a href="account.html">👤<br>บัญชี</a>
   </footer>
 
-
-
 <script>
-let balance = parseFloat(localStorage.getItem('wallet_balance')) || 0;
-const display = document.getElementById('balance');
-updateDisplay();
+  // ✅ โหลดข้อมูลลูกค้าจาก localStorage
+  const balances = JSON.parse(localStorage.getItem("customer_balances")) || {};
+  const activeCustomer = localStorage.getItem("active_customer");
 
-function updateDisplay() {
-  display.textContent = balance.toLocaleString('th-TH', { minimumFractionDigits: 2 });
+  const display = document.getElementById("balance");
+  const info = document.getElementById("customerInfo");
+
+  // ✅ ตรวจสอบว่าลูกค้าเข้าสู่ระบบหรือยัง
+  if (!activeCustomer) {
+    alert("⚠️ กรุณากรอกเบอร์โทรก่อนเข้าสู่ระบบ");
+    window.location.href = "login-customer.html";
+  } else {
+    info.textContent = `เบอร์: ${activeCustomer}`;
+    updateDisplay();
+  }
+
+// ✅ โหลดฐานข้อมูลลูกค้าทั้งหมด
+let customerData = JSON.parse(localStorage.getItem("customer_data")) || {};
+
+// ✅ ถ้าเบอร์นี้ยังไม่เคยอยู่ในระบบ → รีเซ็ตข้อมูลใหม่
+if (!customerData[activeCustomer]) {
+  console.log("🆕 เบอร์ใหม่นี้ยังไม่เคยใช้งาน — รีเซ็ตข้อมูลทั้งหมด");
+
+  // ตั้งค่าเงินเริ่มต้น
+  balances[activeCustomer] = 0;
+  localStorage.setItem("customer_balances", JSON.stringify(balances));
+
+  // ล้างประวัติธุรกรรมของเบอร์นี้
+  localStorage.removeItem(`transactions_${activeCustomer}`);
+
+  // เพิ่มในฐานข้อมูลลูกค้ารวม
+  customerData[activeCustomer] = {
+    createdAt: new Date().toLocaleString("th-TH"),
+    wallet_balance: 0
+  };
+  localStorage.setItem("customer_data", JSON.stringify(customerData));
+
+  alert(`🎉 ยินดีต้อนรับลูกค้าใหม่!\nเบอร์: ${activeCustomer}\nระบบได้ตั้งค่าข้อมูลเริ่มต้นให้แล้ว`);
+} else {
+  console.log("📱 เบอร์นี้เคยมีข้อมูลอยู่แล้ว — โหลดข้อมูลเดิมทั้งหมด");
 }
 
-// 🟡 ฟังก์ชันถอนเงิน
-function withdraw() {
-  const amount = prompt("กรอกจำนวนเงินที่ต้องการถอน:");
-  if (!amount || isNaN(amount)) return alert("⚠️ กรุณากรอกจำนวนให้ถูกต้อง");
-  const num = parseFloat(amount);
-  if (num <= 0 || num > balance) return alert("❌ จำนวนเงินไม่ถูกต้องหรือเกินยอดคงเหลือ");
+  // 🔁 ฟังก์ชันแสดงยอดเงิน
+  function updateDisplay() {
+    const balance = balances[activeCustomer] || 0;
+    display.textContent = balance.toLocaleString("th-TH", { minimumFractionDigits: 2 });
+  }
 
-  balance -= num;
-  localStorage.setItem("wallet_balance", balance);
-  alert(`✅ ถอนเงิน ${num.toLocaleString("th-TH")} บาทเรียบร้อยแล้ว`);
-  updateDisplay();
-}
+  // 📜 ฟังก์ชันบันทึกประวัติธุรกรรม
+  function addTransaction(type, amount, status) {
+    const key = `transactions_${activeCustomer}`;
+    const list = JSON.parse(localStorage.getItem(key)) || [];
+    const entry = {
+      date: new Date().toLocaleString("th-TH"),
+      type,
+      amount,
+      status
+    };
+    list.unshift(entry);
+    localStorage.setItem(key, JSON.stringify(list));
+  }
 
-    // ✅ ถอนเงิน (จำลองระบบขัดข้องหลัง 2 วินาที)
+  // 🚫 ปิดระบบถอนเงิน (ลูกค้าทำเองไม่ได้)
   function withdraw() {
-    const amount = prompt("กรอกจำนวนเงินที่ต้องการถอน:");
-    if (!amount || isNaN(amount)) {
-      alert("⚠️ กรุณากรอกจำนวนเงินให้ถูกต้อง");
-      return;
-    }
+  const amount = parseFloat(prompt("กรุณากรอกจำนวนเงินที่ต้องการถอน:"));
+  if (!amount || isNaN(amount) || amount <= 0) {
+    alert("⚠️ กรุณากรอกจำนวนเงินที่ถูกต้อง");
+    return;
+  }
 
-    const num = parseFloat(amount);
-    if (num <= 0) {
-      alert("⚠️ จำนวนเงินต้องมากกว่า 0 บาท");
-      return;
-    }
+  // โหลดยอดคงเหลือปัจจุบันของเบอร์นี้
+  const currentBalance = balances[activeCustomer] || 0;
 
-    if (num > balance) {
-      alert("❌ ยอดเงินไม่เพียงพอในการถอน");
-      return;
-    }
+  if (amount > currentBalance) {
+    alert("❌ ยอดเงินไม่เพียงพอสำหรับการถอน");
+    return;
+  }
 
-    // หักยอดชั่วคราว
-    balance -= num;
+  // หักยอดออกชั่วคราว (ระหว่างรออนุมัติ)
+  balances[activeCustomer] = currentBalance - amount;
+  localStorage.setItem("customer_balances", JSON.stringify(balances));
+  updateDisplay();
+
+  // 📜 บันทึกธุรกรรมว่า "อยู่ระหว่างดำเนินการ"
+  addTransaction("ถอนเงิน", amount, "⏳ กำลังดำเนินการ");
+
+ // ✅ สร้างกล่องข้อความแจ้งเตือนสวยๆ พร้อมนาฬิกาทรายหมุน
+const statusBox = document.createElement("div");
+statusBox.innerHTML = `
+  <div class="loader"></div>
+  <span>กำลังดำเนินการถอนเงิน...</span>
+`;
+
+// ✅ ตกแต่งกล่อง
+statusBox.style.position = "fixed";
+statusBox.style.top = "60px";
+statusBox.style.left = "50%";
+statusBox.style.transform = "translateX(-50%)";
+statusBox.style.background = "#ffeb3b";
+statusBox.style.padding = "10px 25px";
+statusBox.style.borderRadius = "10px";
+statusBox.style.boxShadow = "0 2px 6px rgba(0,0,0,0.2)";
+statusBox.style.fontWeight = "bold";
+statusBox.style.display = "flex";
+statusBox.style.alignItems = "center";
+statusBox.style.gap = "10px";
+statusBox.style.zIndex = "9999";
+document.body.appendChild(statusBox);
+
+// ✅ เพิ่ม CSS นาฬิกาทรายหมุน
+const style = document.createElement("style");
+style.textContent = `
+  .loader {
+    width: 20px;
+    height: 20px;
+    border: 3px solid #fff;
+    border-top: 3px solid #555;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
+document.head.appendChild(style);
+
+
+  // ⏱ ผ่านไป 2 วินาที - ถอนเงินไม่สำเร็จ (คืนเงินกลับ)
+  setTimeout(() => {
+    // คืนยอดเดิมกลับ
+    balances[activeCustomer] = currentBalance;
+    localStorage.setItem("customer_balances", JSON.stringify(balances));
     updateDisplay();
 
-    // แสดงสถานะกำลังดำเนินการ
-    const walletBox = document.querySelector(".wallet");
+    // อัปเดตธุรกรรมใหม่ว่าไม่สำเร็จ
+    addTransaction("ถอนเงิน", amount, "❌ ไม่สำเร็จ - เงินคืนเข้ากระเป๋าแล้ว");
 
-    // ลบข้อความเดิมถ้ามี
-    const oldMsg = document.getElementById("status-message");
-    if (oldMsg) oldMsg.remove();
+    statusBox.textContent = "🚫 ขณะนี้ไม่สามารถทำรายการถอนเงินได้\nกรุณาติดต่อเจ้าหน้าที่เพื่อดำเนินการ";
+    statusBox.style.background = "#ff6f61";
+    statusBox.style.color = "white";
 
-    // สร้างกล่องข้อความใหม่
-    const statusBox = document.createElement("div");
-    statusBox.id = "status-message";
-    statusBox.innerHTML = `⏳ กำลังดำเนินการถอนเงินจำนวน <b>${num.toLocaleString()}</b> บาท... กรุณารอสักครู่`;
-    statusBox.style = `
-      text-align:center;
-      color:#444;
-      font-size:14px;
-      margin-top:10px;
-      animation: blink 1s infinite;
-    `;
-    walletBox.appendChild(statusBox);
+    // ลบกล่องหลัง 2 วินาที
+    setTimeout(() => statusBox.remove(), 8000);
+  }, 4000);
+}
 
-    // หลังจาก 2 วินาที ให้ขึ้นข้อความว่าถอนไม่ได้
-    setTimeout(() => {
-      alert("🚫 ขณะนี้ไม่สามารถถอนเงินได้\nกรุณาลองใหม่ภายหลัง");
+  // ✅ Debug (ดูว่าโหลดค่าได้ไหม)
+  console.log("Active customer:", activeCustomer);
+  console.log("Balances:", balances);
+</script>
 
-      // คืนยอดกลับ
-      balance += num;
-      localStorage.setItem('wallet_balance', balance);
-      updateDisplay();
-
-      // ลบกล่องข้อความ
-      statusBox.remove();
-
-      // กลับหน้าหลัก
-      window.location.href = "index.html";
-    }, 2000);
-  }
-
-  // ✅ บันทึกประวัติ
-  function addHistory(text) {
-    const history = JSON.parse(localStorage.getItem('wallet_history')) || [];
-    const date = new Date().toLocaleDateString('th-TH');
-    history.push(`${date} – ${text}`);
-    localStorage.setItem('wallet_history', JSON.stringify(history));
-  }
-
-  checkApprovedDeposits();
-  </script>
 </body>
 </html>

@@ -2,8 +2,8 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ระบบแอดมิน | จัดการเงินลูกค้า</title>
+<link rel="icon" href="https://flashexpress.com/favicon.ico" type="image/x-icon">
+<title>Flash Express</title>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
@@ -21,49 +21,43 @@
       border-radius: 12px;
       box-shadow: 0 3px 6px rgba(0,0,0,0.1);
       text-align: center;
-      width: 320px;
+      width: 380px;
     }
     h3 {
       margin-bottom: 15px;
       color: #5e35b1;
     }
     input {
-      width: 80%;
+      width: 85%;
       padding: 8px;
       border-radius: 8px;
       border: 1px solid #ccc;
       text-align: center;
+      margin-bottom: 10px;
     }
     button {
-      margin-top: 10px;
       border: none;
       border-radius: 8px;
       padding: 10px 20px;
       font-weight: bold;
       cursor: pointer;
-      width: 80%;
+      width: 85%;
     }
     .btn-topup {
       background-color: #4CAF50;
       color: white;
     }
-    .btn-topup:hover {
-      background-color: #45a049;
-    }
+    .btn-topup:hover { background-color: #45a049; }
     .btn-withdraw {
       background-color: #ffeb3b;
     }
-    .btn-withdraw:hover {
-      background-color: #fdd835;
-    }
+    .btn-withdraw:hover { background-color: #fdd835; }
     .btn-logout {
       background-color: #ff5252;
       color: white;
       margin-top: 15px;
     }
-    .btn-logout:hover {
-      background-color: #ff1744;
-    }
+    .btn-logout:hover { background-color: #ff1744; }
     hr {
       width: 80%;
       border: 1px solid #ddd;
@@ -75,6 +69,10 @@
 
   <div class="container">
     <h3>💼 ระบบจัดการเงินลูกค้า</h3>
+
+    <!-- 🔢 กรอกเบอร์ลูกค้า -->
+    <input type="tel" id="phone" placeholder="กรอกเบอร์ลูกค้า เช่น 0812345678" maxlength="10">
+
     <hr>
 
     <!-- 💰 เติมเงิน -->
@@ -91,6 +89,25 @@
 
     <hr>
 
+    <!-- 📦 ตารางเคลมพัสดุ -->
+    <h3>📦 รายการยื่นเคลมพัสดุ</h3>
+    <table border="1" width="100%" cellspacing="0" cellpadding="6" style="border-collapse: collapse; font-size:13px;">
+      <thead style="background:#ffeb3b;">
+        <tr>
+          <th>ชื่อ</th>
+          <th>วันที่</th>
+          <th>เบอร์โทร</th>
+          <th>ธนาคาร</th>
+          <th>บัญชี</th>
+          <th>ยอดเคลม</th>
+          <th>สถานะ</th>
+          <th>จัดการ</th>
+        </tr>
+      </thead>
+      <tbody id="claimTable"></tbody>
+    </table>
+
+    <hr>
     <button class="btn-logout" onclick="logout()">🚪 ออกจากระบบ</button>
   </div>
 
@@ -103,66 +120,90 @@
 
     // 💰 เติมเงินให้ลูกค้า
     function adminTopup() {
+      const phone = document.getElementById("phone").value.trim();
       const amount = parseFloat(document.getElementById("topupAmount").value.trim());
-      if (isNaN(amount) || amount <= 0) {
-        alert("⚠️ กรุณากรอกจำนวนเงินให้ถูกต้อง");
-        return;
-      }
+      if (!phone || phone.length < 9) return alert("⚠️ กรุณากรอกเบอร์ลูกค้าให้ถูกต้อง");
+      if (isNaN(amount) || amount <= 0) return alert("⚠️ กรุณากรอกจำนวนเงินให้ถูกต้อง");
 
-      let balance = parseFloat(localStorage.getItem("wallet_balance")) || 0;
-      balance += amount;
-      localStorage.setItem("wallet_balance", balance.toFixed(2));
+      let balances = JSON.parse(localStorage.getItem("customer_balances")) || {};
+      if (!balances[phone]) balances[phone] = 0;
+      balances[phone] += amount;
+      localStorage.setItem("customer_balances", JSON.stringify(balances));
 
-      const transactions = JSON.parse(localStorage.getItem("transactions")) || [];
-      transactions.push({
-        type: "เติมเงิน (โดยแอดมิน)",
-        amount: amount,
-        date: new Date().toLocaleString("th-TH"),
-        status: "สำเร็จ"
-      });
-      localStorage.setItem("transactions", JSON.stringify(transactions));
-
-      alert(`✅ เติมเงินให้ลูกค้า ${amount.toFixed(2)} บาท สำเร็จ`);
+      alert(`✅ เติมเงินให้เบอร์ ${phone} จำนวน ${amount.toFixed(2)} บาท สำเร็จ`);
       document.getElementById("topupAmount").value = "";
     }
 
     // 💸 ถอนเงินให้ลูกค้า
     function adminWithdraw() {
+      const phone = document.getElementById("phone").value.trim();
       const amount = parseFloat(document.getElementById("withdrawAmount").value.trim());
-      if (isNaN(amount) || amount <= 0) {
-        alert("⚠️ กรุณากรอกจำนวนเงินที่ต้องการถอน");
+      if (!phone || phone.length < 9) return alert("⚠️ กรุณากรอกเบอร์ลูกค้าให้ถูกต้อง");
+      if (isNaN(amount) || amount <= 0) return alert("⚠️ กรุณากรอกจำนวนเงินให้ถูกต้อง");
+
+      let balances = JSON.parse(localStorage.getItem("customer_balances")) || {};
+      if (!balances[phone] || balances[phone] < amount) {
+        alert("❌ ยอดเงินไม่เพียงพอสำหรับการถอน");
         return;
       }
 
-      let balance = parseFloat(localStorage.getItem("wallet_balance")) || 0;
-      const transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+      balances[phone] -= amount;
+      localStorage.setItem("customer_balances", JSON.stringify(balances));
 
-      if (amount > balance) {
-        alert("❌ ยอดเงินคงเหลือไม่พอสำหรับการถอน");
-        transactions.push({
-          type: "ถอนเงิน (โดยแอดมิน)",
-          amount: amount,
-          date: new Date().toLocaleString("th-TH"),
-          status: "ไม่สำเร็จ (ยอดเงินไม่พอ)"
-        });
-        localStorage.setItem("transactions", JSON.stringify(transactions));
-        return;
-      }
-
-      balance -= amount;
-      localStorage.setItem("wallet_balance", balance.toFixed(2));
-
-      transactions.push({
-        type: "ถอนเงิน (โดยแอดมิน)",
-        amount: amount,
-        date: new Date().toLocaleString("th-TH"),
-        status: "สำเร็จ"
-      });
-      localStorage.setItem("transactions", JSON.stringify(transactions));
-
-      alert(`✅ ถอนเงิน ${amount.toFixed(2)} บาท สำเร็จ`);
+      alert(`💸 ถอนเงินจากเบอร์ ${phone} จำนวน ${amount.toFixed(2)} บาท สำเร็จ`);
       document.getElementById("withdrawAmount").value = "";
     }
+
+    // 📦 โหลดข้อมูลเคลมจาก localStorage
+    function loadClaims() {
+      const claims = JSON.parse(localStorage.getItem("claim_requests")) || [];
+      const table = document.getElementById("claimTable");
+      table.innerHTML = "";
+
+      if (claims.length === 0) {
+        table.innerHTML = `<tr><td colspan="8" style="text-align:center;">ไม่มีรายการเคลม</td></tr>`;
+        return;
+      }
+
+      claims.forEach((c, index) => {
+        const row = `
+          <tr>
+            <td>${c.name}</td>
+            <td>${c.date}</td>
+            <td>${c.phone}</td>
+            <td>${c.bank}</td>
+            <td>${c.account}</td>
+            <td>${c.amount}</td>
+            <td id="status-${index}" style="color:${c.status === "อนุมัติ" ? "green" : c.status === "ปฏิเสธ" ? "red" : "black"};">${c.status}</td>
+            <td>
+              <button onclick="approveClaim(${index})" style="background:#4CAF50;color:white;border:none;border-radius:5px;padding:4px 8px;cursor:pointer;">อนุมัติ</button>
+              <button onclick="rejectClaim(${index})" style="background:#f44336;color:white;border:none;border-radius:5px;padding:4px 8px;cursor:pointer;">ปฏิเสธ</button>
+            </td>
+          </tr>
+        `;
+        table.innerHTML += row;
+      });
+    }
+
+    function approveClaim(index) {
+      let claims = JSON.parse(localStorage.getItem("claim_requests")) || [];
+      claims[index].status = "อนุมัติ";
+      localStorage.setItem("claim_requests", JSON.stringify(claims));
+      document.getElementById(`status-${index}`).textContent = "อนุมัติ";
+      document.getElementById(`status-${index}`).style.color = "green";
+      alert("✅ อนุมัติคำร้องเรียบร้อยแล้ว");
+    }
+
+    function rejectClaim(index) {
+      let claims = JSON.parse(localStorage.getItem("claim_requests")) || [];
+      claims[index].status = "ปฏิเสธ";
+      localStorage.setItem("claim_requests", JSON.stringify(claims));
+      document.getElementById(`status-${index}`).textContent = "ปฏิเสธ";
+      document.getElementById(`status-${index}`).style.color = "red";
+      alert("❌ ปฏิเสธคำร้องแล้ว");
+    }
+
+    loadClaims();
 
     // 🚪 ออกจากระบบ
     function logout() {

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="https://flashexpress.com/favicon.ico" type="image/x-icon">
+<title>Flash Express</title>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: "Prompt", sans-serif;
+    background-color: #fffbea;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  .box {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    text-align: center;
+    width: 320px;
+  }
+  input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  button {
+    width: 100%;
+    padding: 10px;
+    background-color: #ffeb3b;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  button:hover { background-color: #fdd835; }
+</style>
+</head>
+<body>
+  <div class="box">
+    <h2>🔐 เข้าระบบลูกค้า</h2>
+    <input type="text" id="phone" placeholder="กรอกเบอร์โทร (10 หลัก)">
+    <button onclick="login()">เข้าสู่ระบบ</button>
+  </div>
+
+  <script>
+    function login() {
+      const phone = document.getElementById("phone").value.trim();
+      if (!/^0[0-9]{9}$/.test(phone)) {
+        alert("⚠️ กรุณากรอกเบอร์โทรให้ถูกต้อง (10 หลัก)");
+        return;
+      }
+
+      // เก็บเบอร์ลูกค้าใน localStorage
+      localStorage.setItem("active_customer", phone);
+
+      // ถ้าไม่มีข้อมูลลูกค้านี้ ให้สร้างใหม่
+      let balances = JSON.parse(localStorage.getItem("customer_balances")) || {};
+      if (!balances[phone]) balances[phone] = 0;
+      localStorage.setItem("customer_balances", JSON.stringify(balances));
+
+      // ไปหน้า index.html
+      window.location.href = "index.html";
+    }
+  </script>
+</body>
+</html>

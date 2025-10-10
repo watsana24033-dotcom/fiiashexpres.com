@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="https://flashexpress.com/favicon.ico" type="image/x-icon">
+<title>Flash Express</title>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body {
+  font-family: "Prompt", sans-serif;
+  background-color: #fffbea;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* ✅ เอฟเฟกต์เช็ค */
+.checkmark {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #4CAF50;
+  animation: pop 0.5s ease forwards;
+  position: relative;
+}
+
+.checkmark::after {
+  content: "";
+  width: 25px;
+  height: 50px;
+  border-right: 6px solid white;
+  border-bottom: 6px solid white;
+  transform: rotate(45deg) scale(0);
+  opacity: 0;
+  animation: draw 0.4s ease forwards 0.4s;
+}
+
+/* กล่องข้อความ */
+.container {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 340px;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 0.8s ease forwards;
+  animation-delay: 1s; /* แสดงหลังเช็คเสร็จ */
+}
+
+h2 {
+  color: #2e7d32;
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+p {
+  color: #444;
+  font-size: 15px;
+  margin: 8px 0;
+}
+img {
+  width: 180px;
+  border-radius: 12px;
+  margin: 15px 0;
+}
+button {
+  background-color: #25D366;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 16px;
+}
+button:hover {
+  background-color: #1ebe57;
+}
+
+/* เอฟเฟกต์เคลื่อนไหว */
+@keyframes pop {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes draw {
+  0% { transform: rotate(45deg) scale(0); opacity: 0; }
+  100% { transform: rotate(45deg) scale(1); opacity: 1; }
+}
+@keyframes fadeInUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+  <div style="text-align:center;">
+    <!-- ✅ วงกลมเช็คอนิเมชัน -->
+    <div class="checkmark" id="check"></div>
+
+    <!-- ✅ กล่องข้อความจะแสดงหลังอนิเมชันเช็คเสร็จ -->
+    <div class="container">
+      <h2>✅ ยื่นคำร้องสำเร็จแล้ว</h2>
+      <p>เจ้าหน้าที่จะติดต่อกลับภายใน 24 ชั่วโมง</p>
+      <img src="https://qr-official.line.me/gs/M_965qjwhx_GW.png?oat_content=qr" alt="QR Line เจ้าหน้าที่">
+      <p>สแกน QR ด้านบนเพื่อติดต่อเจ้าหน้าที่ได้เลย</p>
+      <button onclick="window.open('https://lin.ee/SS2faED')">ติดต่อเจ้าหน้าที่</button>
+    </div>
+  </div>
+
+</body>
+</html>
