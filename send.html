@@ -1,101 +1,98 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<link rel="icon" href="https://flashexpress.com/favicon.ico" type="image/x-icon">
-<title>Flash Express</title>
-<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet">
-<style>
-body { font-family:"Prompt",sans-serif; background:#fffbea; text-align:center; padding:30px; margin:0; }
-h2 { color:#000; margin-top:0; }
-.header {
-  background:#ffeb3b;
-  font-weight:bold;
-  font-size:20px;
-  padding:12px;
-  text-align:center;
-  border-bottom:2px solid #f5da00;
-}
-input {
-  padding:10px;
-  border-radius:8px;
-  border:1px solid #ccc;
-  width:80%;
-  max-width:300px;
-  margin-bottom:10px;
-  font-size:16px;
-}
-button {
-  margin-top:10px;
-  padding:10px 20px;
-  border:none;
-  border-radius:8px;
-  font-weight:bold;
-  cursor:pointer;
-}
-button.yellow { background:#ffeb3b; }
-button.white { background:#fff; border:1px solid #000; }
-.success {
-  background:#d4edda;
-  border:1px solid #155724;
-  color:#155724;
-  border-radius:8px;
-  padding:15px;
-  margin-top:15px;
-  width:80%;
-  max-width:350px;
-  margin-left:auto;
-  margin-right:auto;
-  display:none;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="https://flashexpress.com/favicon.ico" type="image/x-icon">
+  <title>ส่งพัสดุสำเร็จ | Flash Express</title>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: "Prompt", sans-serif;
+      background-color: #fffbea;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .success-box {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      padding: 30px 25px;
+      width: 360px;
+      animation: fadeIn 0.8s ease;
+    }
+
+    .icon {
+      font-size: 50px;
+      margin-bottom: 15px;
+      color: green;
+    }
+
+    h2 {
+      color: #333;
+      margin: 10px 0;
+      font-size: 20px;
+    }
+
+    p {
+      color: #666;
+      margin-bottom: 20px;
+      font-size: 15px;
+    }
+
+    button {
+      width: 100%;
+      background-color: #ffeb3b;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background-color: #fdd835;
+    }
+
+    /* เอฟเฟกต์แสดงขึ้นนุ่มๆ */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 📱 Responsive สำหรับมือถือ */
+    @media (max-width: 600px) {
+      .success-box {
+        width: 90%;
+        padding: 25px 20px;
+      }
+
+      h2 {
+        font-size: 18px;
+      }
+
+      p {
+        font-size: 14px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<!-- ส่วนหัว -->
-<div class="header">📦 ส่งพัสดุ Flash Express</div>
-
-<h2>กรอกข้อมูลพัสดุเพื่อเริ่มการจัดส่ง</h2>
-
-<!-- ฟอร์มส่งพัสดุ -->
-<input type="text" id="name" placeholder="ชื่อผู้ส่ง">
-<br>
-<input type="text" id="address" placeholder="ที่อยู่ผู้ส่ง">
-<br>
-<input type="text" id="phone" maxlength="10" placeholder="เบอร์โทรศัพท์">
-<br>
-<button class="yellow" onclick="sendParcel()">ส่งพัสดุ</button>
-<br><br>
-<a href="index.html">← กลับหน้าหลัก</a>
-
-<!-- กล่องข้อความสำเร็จ -->
-<div id="successBox" class="success">
-  ✅ ดำเนินการส่งพัสดุเรียบร้อยแล้ว!
-</div>
-
-<script>
-function sendParcel() {
-  const name = document.getElementById("name").value.trim();
-  const address = document.getElementById("address").value.trim();
-  const phone = document.getElementById("phone").value.trim();
-
-  // ตรวจสอบความถูกต้อง
-  if (!name || !address || phone.length !== 10 || isNaN(phone)) {
-    alert("⚠️ กรุณากรอกข้อมูลให้ครบถ้วนและเบอร์โทรให้ถูกต้อง (10 หลัก)");
-    return;
-  }
-
-  // แสดงข้อความแจ้งเตือน
-  const box = document.getElementById("successBox");
-  box.style.display = "block";
-
-  // ซ่อนข้อความหลัง 3 วินาที
-  setTimeout(() => {
-    box.style.display = "none";
-    window.location.href = "index.html"; // กลับหน้าหลักอัตโนมัติ
-  }, 3000);
-}
-</script>
+  <div class="success-box">
+    <div class="icon">✅</div>
+    <h2>ส่งพัสดุสำเร็จ!</h2>
+    <p>ระบบได้รับข้อมูลพัสดุของคุณเรียบร้อยแล้ว<br>เจ้าหน้าที่จะติดต่อกลับภายใน 24 ชั่วโมง</p>
+    <button onclick="window.location.href='index.html'">🏠 กลับหน้าหลัก</button>
+  </div>
 
 </body>
 </html>

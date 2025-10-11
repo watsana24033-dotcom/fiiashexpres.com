@@ -2,26 +2,159 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-<link rel="icon" href="https://flashexpress.com/favicon.ico" type="image/x-icon">
-<title>Flash Express</title>
-</head>
-<body style="font-family:Prompt,sans-serif; background:#fffbea; text-align:center; padding:40px;">
-  <h2>📰 ข่าวสาร</h2>
-  <p>รวมข่าวและโปรโมชั่นล่าสุดจาก Flash Express</p>
-  <ul style="text-align:left; display:inline-block;">
-    <li>🎉 โปรโมชั่นส่งพัสดุลด 10%</li>
-    <li>🚚 เปิดสาขาใหม่ทั่วประเทศ</li>
-    <li>💰 แนะนำเพื่อน รับเครดิตเงินคืน</li>
-  </ul>
-  <br><br>
-  <a href="index.html">← กลับหน้าหลัก</a>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="https://flashexpress.com/favicon.ico" type="image/x-icon">
+  <title>ข่าวสาร | Flash Express</title>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet">
 
-  <!-- เมนูด้านล่าง -->
-  <footer style="position:fixed;bottom:0;left:0;width:100%;background:white;border-top:1px solid #ddd;display:flex;justify-content:space-around;padding:8px 0;font-size:12px;box-shadow:0 -2px 4px rgba(0,0,0,0.05);">
-    <a href="index.html" style="text-align:center;text-decoration:none;color:#333;">🏠<br>หน้าหลัก</a>
-    <a href="news.html" style="text-align:center;text-decoration:none;color:#ffeb3b;font-weight:bold;">📰<br>ข่าวสาร</a>
-    <a href="transaction.html" style="text-align:center;text-decoration:none;color:#333;">💰<br>ธุรกรรม</a>
-    <a href="account.html" style="text-align:center;text-decoration:none;color:#333;">👤<br>บัญชี</a>
+  <style>
+    body {
+      font-family: "Prompt", sans-serif;
+      background-color: #fffbea;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #ffeb3b;
+      text-align: center;
+      padding: 12px 20px;
+      font-weight: bold;
+      font-size: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 20px auto 80px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    p.subtitle {
+      text-align: center;
+      color: #555;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    ul li {
+      background: #fffbea;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    ul li span {
+      font-size: 20px;
+    }
+
+    a.back {
+      display: block;
+      text-align: center;
+      margin-top: 15px;
+      color: purple;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    a.back:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: white;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0;
+      font-size: 12px;
+      box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
+    }
+
+    footer a {
+      text-align: center;
+      text-decoration: none;
+      color: #333;
+    }
+
+    footer a.active {
+      color: purple;
+      font-weight: bold;
+    }
+
+    /* 📱 Responsive สำหรับมือถือ */
+    @media (max-width: 600px) {
+      .container {
+        margin: 15px 10px 90px;
+        padding: 15px;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+
+      ul li {
+        font-size: 14px;
+        padding: 8px 10px;
+      }
+
+      footer {
+        font-size: 11px;
+        padding: 6px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>📰 ข่าวสาร</header>
+
+  <div class="container">
+    <h2>ข่าวสารและโปรโมชั่น</h2>
+    <p class="subtitle">รวมข่าวล่าสุดจาก Flash Express</p>
+
+    <ul>
+      <li><span>🎉</span> โปรโมชั่นส่งพัสดุ ลดสูงสุด 10%</li>
+      <li><span>🚚</span> เปิดสาขาใหม่ทั่วประเทศ</li>
+      <li><span>💰</span> แนะนำเพื่อน รับเครดิตเงินคืน</li>
+    </ul>
+
+    <a href="index.html" class="back">← กลับหน้าหลัก</a>
+  </div>
+
+  <footer>
+    <a href="index.html">🏠<br>หน้าหลัก</a>
+    <a href="news.html" class="active">📰<br>ข่าวสาร</a>
+    <a href="transaction.html">💰<br>ธุรกรรม</a>
+    <a href="account.html">👤<br>บัญชี</a>
   </footer>
+
 </body>
 </html>

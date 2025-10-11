@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="https://flashexpress.com/favicon.ico" type="image/x-icon">
+  <title>บัญชีของฉัน | Flash Express</title>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: "Prompt", sans-serif;
+      background: #fffbea;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .header {
+      background: #ffeb3b;
+      font-weight: bold;
+      font-size: 20px;
+      padding: 14px;
+      text-align: center;
+      border-bottom: 2px solid #f5da00;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .info-box {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin: 25px auto;
+      width: 90%;
+      max-width: 400px;
+      text-align: left;
+      line-height: 1.8;
+    }
+
+    .info-box h3 {
+      text-align: center;
+      color: #000;
+      margin-bottom: 15px;
+    }
+
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dashed #ccc;
+      padding: 5px 0;
+    }
+
+    .info-item b {
+      color: #333;
+    }
+
+    .btn-group {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-weight: bold;
+      margin: 5px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-yellow {
+      background: #ffeb3b;
+    }
+
+    .btn-yellow:hover {
+      background: #fdd835;
+    }
+
+    .btn-red {
+      background: #f44336;
+      color: white;
+    }
+
+    .btn-red:hover {
+      background: #e53935;
+    }
+
+    a {
+      display: block;
+      margin-top: 20px;
+      color: purple;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive 📱 */
+    @media (max-width: 600px) {
+      body { padding: 15px; }
+      .info-box { width: 95%; padding: 15px; }
+      button { width: 45%; font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">💳 บัญชีธนาคารของฉัน</div>
+
+  <div id="accountContainer"></div>
+
+  <a href="index.html">← กลับหน้าหลัก</a>
+
+  <script>
+    const accountContainer = document.getElementById("accountContainer");
+
+    // ✅ โหลดข้อมูลจาก localStorage
+    const bankData = JSON.parse(localStorage.getItem("bank_info"));
+
+    if (!bankData) {
+      accountContainer.innerHTML = `
+        <div class="info-box" style="text-align:center;">
+          <h3>ยังไม่มีข้อมูลบัญชี</h3>
+          <p>กรุณาผูกบัญชีธนาคารก่อนใช้งาน</p>
+          <button class="btn-yellow" onclick="window.location.href='bind.html'">ผูกบัญชีตอนนี้</button>
+        </div>
+      `;
+    } else {
+      accountContainer.innerHTML = `
+        <div class="info-box">
+          <h3>ข้อมูลบัญชีธนาคาร</h3>
+          <div class="info-item"><b>🏦 ธนาคาร:</b> <span>${bankData.bankName}</span></div>
+          <div class="info-item"><b>💳 เลขบัญชี:</b> <span>${bankData.accountNumber}</span></div>
+          <div class="info-item"><b>👤 ชื่อบัญชี:</b> <span>${bankData.accountOwner}</span></div>
+
+          <div class="btn-group">
+            <button class="btn-yellow" onclick="editAccount()">✏️ แก้ไข</button>
+            <button class="btn-red" onclick="deleteAccount()">🗑️ ลบ</button>
+          </div>
+        </div>
+      `;
+    }
+
+    // 🟡 แก้ไขข้อมูล
+    function editAccount() {
+      alert("คุณจะถูกนำไปที่หน้าแก้ไข (bind.html)");
+      window.location.href = "bind.html";
+    }
+
+    // 🔴 ลบข้อมูล
+    function deleteAccount() {
+      if (confirm("❌ ต้องการลบข้อมูลบัญชีนี้หรือไม่?")) {
+        localStorage.removeItem("bank_info");
+        alert("✅ ลบข้อมูลเรียบร้อยแล้ว");
+        location.reload();
+      }
+    }
+  </script>
+
+</body>
+</html>
