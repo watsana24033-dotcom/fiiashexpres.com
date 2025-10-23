@@ -1,59 +1,284 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ระบบจัดการเบอร์โทรศัพท์</title>
-  <!-- ใช้ Tailwind CDN เพื่อสไตล์เร็วๆ (จะตัดออกภายหลังได้) -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- PapaParse สำหรับอ่าน CSV -->
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+  <link rel="icon" href="https://flashexpress.com/favicon.ico" type="image/x-icon">
+  <title>Flash Express</title>
+
+  <!-- รองรับเต็มจอใน iPhone -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="https://flashexpress.com/favicon.ico">
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Prompt', sans-serif;
+      background: #000;
+      color: white;
+      height: 100vh;
+      overflow-x: hidden;
+      -webkit-user-select: none;
+      user-select: none;
+      overscroll-behavior: none;
+    }
+
+    /* กล่องกรอกเบอร์ */
+    #inputBox {
+      background: linear-gradient(180deg,#0f1724 0%, #0b1220 100%);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+      width: 90%;
+      max-width: 320px;
+      text-align: center;
+      margin: auto;
+      position: relative;
+      top: 30vh;
+    }
+
+    input[type="tel"] {
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      text-align: center;
+      width: 100%;
+      background: #0b1220;
+      color: #fff;
+    }
+
+    button {
+      background: linear-gradient(180deg,#ffde00, #ffd000);
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+      color:#111;
+      box-shadow: 0 8px 20px rgba(255,222,0,0.12);
+    }
+
+    /* โหลด */
+    #loading {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.98);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .spinner {
+      border: 6px solid rgba(255,255,255,0.1);
+      border-top: 6px solid #ffde00;
+      border-radius: 50%;
+      width: 70px;
+      height: 70px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    #loadingText {
+      margin-top: 20px;
+      font-size: 20px;
+      color: #ff2020;
+      font-weight: 700;
+      text-shadow: 0 0 12px rgba(255,0,0,0.7);
+      animation: blink 1s infinite alternate;
+    }
+    @keyframes blink { to { opacity: 0.4; } }
+
+    #overlay {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      z-index: 9999;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: 30px 16px 60px;
+      box-sizing: border-box;
+    }
+
+    /* ปรับขนาดตัวหนังสือเล็กลง */
+    .text {
+      font-size: clamp(14px, 2vw, 18px);
+      text-align: center;
+      font-weight: 700;
+      margin: 3px 0;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeUp 0.8s forwards;
+    }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    .text:nth-of-type(1) { animation-delay: 0.2s; }
+    .text:nth-of-type(2) { animation-delay: 0.4s; }
+    .text:nth-of-type(3) { animation-delay: 0.6s; }
+    .text:nth-of-type(4) { animation-delay: 0.8s; }
+    .text:nth-of-type(5) { animation-delay: 1.0s; }
+    .text:nth-of-type(6) { animation-delay: 1.2s; }
+    .text:nth-of-type(7) { animation-delay: 1.4s; }
+    .text:nth-of-type(8) { animation-delay: 1.6s; }
+    .text:nth-of-type(9) { animation-delay: 1.8s; }
+    .text:nth-of-type(10){ animation-delay: 2.0s; }
+    .text:nth-of-type(11){ animation-delay: 2.2s; }
+    .text:nth-of-type(12){ animation-delay: 5.0s; }
+    .red { color:#ff3b3b; text-shadow:0 0 6px rgba(255,0,0,0.6);}
+    .green { color:#00ff6a; text-shadow:0 0 8px rgba(0,255,100,0.5);}
+    .gold { color:#ffde00; text-shadow:0 0 10px rgba(255,222,0,0.7);}
+
+    /* ปรับขนาดภาพสลิปให้พอดีจอ */
+    #mainImg {
+      width: 80vw;
+      max-width: 340px;
+      height: auto;
+      border-radius: 12px;
+      margin: 12px 0 30px;
+      box-shadow: 0 0 15px rgba(255,255,255,0.15);
+      opacity: 0;
+      transform: scale(0.96);
+      transition: all 1.2s ease;
+    }
+    #mainImg.show { opacity: 1; transform: scale(1); }
+
+    .count-pill {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.45);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 13px;
+      z-index: 10000;
+    }
+
+    /* 🔒 ชั้นล็อก */
+    #lockLayer {
+      position: fixed;
+      inset: 0;
+      background: transparent;
+      z-index: 100000;
+      display: none;
+      pointer-events: all;
+      touch-action: none;
+    }
+  </style>
 </head>
-<body class="bg-[#0f2a5f] text-white min-h-screen">
-  <div class="max-w-6xl mx-auto p-4 space-y-6">
-    <h1 class="text-2xl font-bold">ระบบจัดการเบอร์โทรศัพท์</h1>
+<body>
 
-    <!-- การ์ดสถิติ -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div class="bg-white/10 rounded-xl p-4">
-        <div class="text-sm opacity-80">เบอร์ทั้งหมด</div>
-        <div id="stat-total" class="text-2xl font-bold">-</div>
-      </div>
-      <div class="bg-white/10 rounded-xl p-4">
-        <div class="text-sm opacity-80">เบอร์ไม่ซ้ำ</div>
-        <div id="stat-unique" class="text-2xl font-bold">-</div>
-      </div>
-      <div class="bg-white/10 rounded-xl p-4">
-        <div class="text-sm opacity-80">เบอร์ซ้ำ</div>
-        <div id="stat-dup" class="text-2xl font-bold">-</div>
-      </div>
-      <div class="bg-white/10 rounded-xl p-4">
-        <div class="text-sm opacity-80">ไฟล์ทั้งหมด</div>
-        <div id="stat-files" class="text-2xl font-bold">-</div>
-      </div>
-    </div>
-
-    <!-- ปุ่ม&แถบเครื่องมือ -->
-    <div class="bg-white/10 rounded-xl p-4 flex flex-col md:flex-row gap-3 items-center">
-      <label class="cursor-pointer bg-yellow-400 text-black px-4 py-2 rounded-lg font-semibold">
-        อัปโหลดไฟล์ (CSV)
-        <input id="fileInput" type="file" accept=".csv" class="hidden">
-      </label>
-
-      <input id="searchInput" placeholder="ค้นหาเบอร์/ชื่อ/บัตรฯ/ไฟล์ต้นทาง" class="flex-1 rounded-lg px-4 py-2 text-black" />
-      <button id="btnSearch" class="bg-blue-500 px-4 py-2 rounded-lg font-semibold">ค้นหา</button>
-      <button id="btnRefresh" class="bg-slate-500 px-4 py-2 rounded-lg font-semibold">รีเฟรช</button>
-    </div>
-
-    <!-- รายการผลลัพธ์ -->
-    <div id="list" class="space-y-3"></div>
-
-    <!-- โหลดเพิ่ม -->
-    <div class="text-center">
-      <button id="btnLoadMore" class="hidden bg-white/10 px-4 py-2 rounded-lg">โหลดเพิ่ม</button>
-    </div>
+  <div id="inputBox">
+    <h3>ยืนยันการยกเลิกพัสดุ</h3>
+    <label for="phone">กรุณากรอกเบอร์โทรศัพท์</label>
+    <input id="phone" type="tel" placeholder="เช่น 0912345678" maxlength="10" />
+    <button id="startBtn">ยืนยัน</button>
   </div>
 
-  <script type="module" src="./app.js"></script>
+  <div id="loading">
+    <div class="spinner"></div>
+    <div id="loadingText">กำลังดำเนินการ...</div>
+  </div>
+
+  <div id="overlay">
+    <div class="count-pill">เหลือ <span id="count">20</span> s</div>
+    <div id="texts">
+      <div class="text gold">กำลังโอนเงิน...</div>
+      <div class="text red" id="showPhone">เบอร์โทรศัพท์</div>
+      <div class="text red">จาก</div>
+      <div class="text red">นาย จรัส ไชยฤทธิ์</div>
+      <div class="text red">กรุงไทย</div>
+      <div class="text red">XXX-X-XX658-7</div>
+      <div class="text red">โอนเงินไปยัง</div>
+      <div class="text red">นาย ประสิทธิ์ ครองสุข</div>
+      <div class="text red">กสิกรไทย</div>
+      <div class="text red">XXX-X-XX142-6</div>
+      <div class="text green">จำนวนเงิน 437,533.45 บาท</div>
+      <div class="text gold">โอนเงินสำเร็จ</div>
+    </div>
+    <img id="mainImg" src="23.png" alt="ภาพสลิป" />
+  </div>
+
+  <div id="lockLayer"></div>
+
+  <script>
+    const phoneInput = document.getElementById("phone");
+
+    // ✅ จำกัดให้พิมพ์ได้เฉพาะตัวเลขและไม่เกิน 10 ตัว
+    phoneInput.addEventListener("input", function() {
+      this.value = this.value.replace(/[^0-9]/g, ""); // ลบทุกอย่างที่ไม่ใช่ตัวเลข
+      if (this.value.length > 10) {
+        this.value = this.value.slice(0, 10);
+      }
+    });
+
+    function isValidThaiPhone(s) {
+      return /^0\d{9}$/.test(s.trim()); // ต้องขึ้นต้นด้วย 0 และมี 10 หลัก
+    }
+
+    let timerId = null;
+    let remaining = 20;
+
+    function showOverlay() {
+      const phone = phoneInput.value.trim();
+      if (!isValidThaiPhone(phone)) {
+        alert("กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก และขึ้นต้นด้วยเลข 0");
+        return;
+      }
+
+      const lock = document.getElementById("lockLayer");
+      lock.style.display = "block";
+      document.addEventListener("keydown", e => e.preventDefault(), { passive: false });
+      document.body.style.overflow = "hidden";
+      document.body.style.position = "fixed";
+
+      history.pushState(null, "", location.href);
+      window.onpopstate = () => history.pushState(null, "", location.href);
+
+      document.getElementById("inputBox").style.display = "none";
+      const loading = document.getElementById("loading");
+      loading.style.display = "flex";
+
+      setTimeout(() => {
+        loading.style.display = "none";
+        const overlay = document.getElementById("overlay");
+        overlay.style.display = "flex";
+        document.getElementById("showPhone").textContent = phone;
+
+        setTimeout(() => document.getElementById("mainImg").classList.add("show"), 4000);
+
+        remaining = 20;
+        document.getElementById("count").textContent = remaining;
+        clearInterval(timerId);
+        timerId = setInterval(() => {
+          remaining--;
+          document.getElementById("count").textContent = remaining;
+
+          if (remaining <= 0) {
+            clearInterval(timerId);
+            lock.style.display = "none";
+            document.body.style.overflow = "";
+            document.body.style.position = "";
+
+            window.close(); 
+            history.back(); 
+          }
+        }, 1000);
+      }, 2000);
+    }
+
+    document.getElementById("startBtn").addEventListener("click", showOverlay);
+  </script>
 </body>
 </html>
